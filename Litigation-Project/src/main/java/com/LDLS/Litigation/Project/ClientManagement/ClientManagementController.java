@@ -23,6 +23,10 @@ public class ClientManagementController {
 
         return clientManagementService.read(id);
     }
+    @GetMapping("/fetch")
+    public List<ClientManagement> fetch(){
+        return clientManagementService.findAllClients();
+    }
 
     @DeleteMapping("/delete")
     public EntityResponse delete(@RequestParam Long id){

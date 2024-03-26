@@ -127,4 +127,7 @@ public class ClientManagementService {
         }
         return entityResponse;
     }
+    public List<ClientManagement> findAllClients() {
+        return clientMangementRepository.findAll();
+    }
 }
