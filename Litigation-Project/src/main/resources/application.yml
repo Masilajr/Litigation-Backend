@@ -1,12 +1,12 @@
 # MySQL Configurations
 server:
-  port: 7800
+  port: 6900
 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/mutua
+    url: jdbc:mariadb://localhost:3306/emtech_litigation
     username: root
-    password: Bhartem55
+    password:
   #
   #    url: jdbc:mariadb://52.15.152.26:3306/LITIGATION
   #    username: emtech

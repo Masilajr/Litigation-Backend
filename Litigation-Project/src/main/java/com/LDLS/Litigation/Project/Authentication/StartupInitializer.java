@@ -32,37 +32,37 @@ public class StartupInitializer implements ApplicationRunner {
     }
 
     private void createSuperUser() {
-        log.info("------->>>>>> CREATING SUPERUSER <<<<<<-------------");
+        log.info("------->>>>>> CREATING SUPERADMIN <<<<<<-------------");
 
-        if (userRepository.existsByUsername("superuser")) {
+        if (userRepository.existsByUsername("superAdmin")) {
             log.info("username exists!.Skipping creation");
-        }else if (userRepository.existsByEmail("superuser@example.com")) {
-            log.info("Superuser with email superuser@example.com already exists. Skipping creation.");
-        }else{
+        }else if (userRepository.existsByEmail("superAdmin@example.com")) {
+            log.info("Admin  with email SuperAdmin@example.com already exists. Skipping creation.");
+        }else {
 //            Role superUserRole = roleRepository.findByName(ERole.ROLE_SUPERUSER.toString())
-            Role superUserRole = new Role();
-            superUserRole.setName(ERole.ROLE_SUPERUSER.toString());
-            roleRepository.save(superUserRole);
+            Role superAdminRole = new Role();
+            superAdminRole.setName(ERole.ADMIN.toString());
+            roleRepository.save(superAdminRole);
             log.info("Role found!");
-            Users superUser = new Users();
-            superUser.setUsername("superuser");
-            superUser.setEmail("superuser@example.com");
-            superUser.setPassword(passwordEncoder.encode("LITIGATION"));
-            superUser.setRoles(Collections.singleton(superUserRole));
-            superUser.setAcctActive(true);
-            superUser.setAcctLocked(false);
-            superUser.setStatus("ACTIVE");
-            log.info("username = superuser");
-            log.info( "The superuser  log in password is = LITIGATION ");
-            superUser.setVerifiedFlag('Y');
-            superUser.setFirstLogin('Y');
-            superUser.setVerifiedOn(new Date());
-            superUser.setEmail("superuser@example.com");
-            superUser.setFirstName("Super");
-            superUser.setLastName("User");
-            superUser.setPhoneNo("2547123456789");
+            Users superAdmin = new Users();
+            superAdmin.setUsername("superAdmin");
+            superAdmin.setEmail("superAdmin@example.com");
+            superAdmin.setPassword(passwordEncoder.encode("LITIGATION"));
+            superAdmin.setRoles(Collections.singleton(superAdminRole));
+            superAdmin.setAcctActive(true);
+            superAdmin.setAcctLocked(false);
+            superAdmin.setStatus("ACTIVE");
+            log.info("username = superAdmin");
+            log.info("The superAdmin  log in password is = LITIGATION ");
+            superAdmin.setVerifiedFlag('Y');
+            superAdmin.setFirstLogin('Y');
+            superAdmin.setVerifiedOn(new Date());
+            superAdmin.setEmail("superAdmin@example.com");
+            superAdmin.setFirstName("Super");
+            superAdmin.setLastName("Admin");
+            superAdmin.setPhoneNo("2547123456789");
 
-            userRepository.save(superUser);
+            userRepository.save(superAdmin);
         }
     }
 }
