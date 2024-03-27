@@ -3,6 +3,7 @@ import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,8 @@ import java.util.Optional;
 public class UserRegistrationService {
     @Autowired
     UserRegistrationRepository userRegistrationRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public List<UserRegistration> getAllCustomerRegistration() {
         return userRegistrationRepository.findAll();
@@ -27,7 +30,11 @@ public class UserRegistrationService {
             if (user.isPresent()) {
                 response.setMessage("Provided user National Id already exists!!");
                 response.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+
             } else {
+                String randomPassword = passwordEncoder.encode("randomPassword");
+                userRegistration.setTemporaryPassword(randomPassword);
+                userRegistration.setUsername(userRegistration.getUsername());
                 userRegistration.setRole(userRegistration.getRole());
                 UserRegistration registration = userRegistrationRepository.save(userRegistration);
                 response.setMessage("successfully registered Customer");
@@ -49,6 +56,7 @@ public class UserRegistrationService {
                     userRegistration.setFirstName(newUserRegistration.getFirstName());
                     userRegistration.setMiddleName(newUserRegistration.getMiddleName());
                     userRegistration.setLastName(newUserRegistration.getLastName());
+                    userRegistration.setTemporaryPassword(newUserRegistration.getTemporaryPassword());
                     userRegistration.setEmail(newUserRegistration.getEmail());
                     userRegistration.setNationalIdNumber(newUserRegistration.getNationalIdNumber());
                     userRegistration.setRole(newUserRegistration.getRole());

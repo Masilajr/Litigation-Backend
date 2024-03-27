@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/userRegistration")
+@CrossOrigin
 
 public class UserRegistrationController {
     @Autowired
@@ -23,7 +24,7 @@ public class UserRegistrationController {
             return null;
         }
     }
-    @GetMapping("/id")
+    @GetMapping("/get/{id}")
     public ResponseEntity<UserRegistration> getuserRegistrationById(@PathVariable Long id) {
         return userRegistrationService.getUserRegistrationById(id)
                 .map(ResponseEntity::ok)
@@ -35,7 +36,7 @@ public class UserRegistrationController {
         return userRegistrationService.getAllCustomerRegistration();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserRegistration> updateUserRegistration(
             @PathVariable Long id, @RequestBody UserRegistration userRegistration)
     {
@@ -44,7 +45,7 @@ public class UserRegistrationController {
         return ResponseEntity.ok(updatedUserRegistration);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<EntityResponse> deleteUserRegistration(@PathVariable Long id) {
         EntityResponse response = userRegistrationService.deleteUserRegistrationById(id);
         return ResponseEntity.ok(response);

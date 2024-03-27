@@ -114,16 +114,17 @@ public class ClientManagementService {
         try{
             if (caseManagementOptional.isPresent()){
                 clientMangementRepository.deleteById(id);
-                entityResponse.setMessage("Case deleted successfully");
+                entityResponse.setMessage("Client deleted successfully");
                 entityResponse.setStatusCode(HttpStatus.OK.value());
                 entityResponse.setEntity("");
             } else {
-                entityResponse.setMessage("Case not found");
+                entityResponse.setMessage("Client not found");
                 entityResponse.setStatusCode(HttpStatus.NO_CONTENT.value());
                 entityResponse.setEntity(null);
             }
         } catch (Exception e){
             log.error("Error occurred", e);
+
         }
         return entityResponse;
     }

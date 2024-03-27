@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Data
-@Table(name = "users")
+@Table(name = "Users")
 public class Users {
     @Id
     @SequenceGenerator(name = "user_seq", allocationSize = 1, initialValue = 1)
@@ -33,7 +33,7 @@ public class Users {
     private String email;
     @Column(name = "phone", length = 15)
     private String phoneNo;
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "password", length = 255)
     private String password;
     @Column(name = "createdOn", length = 50)
     private Date createdOn;

@@ -28,9 +28,9 @@ public class ClientManagementController {
         return clientManagementService.findAllClients();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     public EntityResponse delete(@RequestParam Long id){
-        return clientManagementService.read(id);
+        return clientManagementService.delete(id);
     }
 
     @GetMapping("/active")
