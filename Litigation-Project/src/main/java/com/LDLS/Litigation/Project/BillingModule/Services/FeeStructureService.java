@@ -35,7 +35,6 @@ public class FeeStructureService {
 
     public BigDecimal calculateTotalBill(Long id, Integer hours) {
         BigDecimal hourlyRate = new BigDecimal(10);
-        BigDecimal totalBill = hourlyRate.multiply(new BigDecimal(hours));
-        return totalBill;
+        return hourlyRate.multiply(new BigDecimal(hours));
     }
 }

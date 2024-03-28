@@ -3,8 +3,10 @@ package com.LDLS.Litigation.Project.BillingModule.Entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,17 +24,19 @@ public class Invoice {
     @ManyToOne
     private Client client; // Foreign key referencing Client
 
+    @NonNull
     private String invoiceNumber; // Unique identifier for the invoice
-
+    @NonNull
     private Date invoiceDate;
+    @NonNull
     private BigDecimal totalAmount;
 
-    public void setItems(List<InvoiceItem> items) {
-    }
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL) // Cascade changes to InvoiceItems
     private List<InvoiceItem> items = new ArrayList<>(); // Initialize an empty list
 
-    // Getters and Setters for other fields
+    public void setItems(List<InvoiceItem> items) {
+        this.items = items; // Updated setter for clarity
+    }
 
     public List<InvoiceItem> getItems() {
         return items; // Return the modifiable list

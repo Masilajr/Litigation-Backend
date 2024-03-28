@@ -4,8 +4,9 @@ import com.LDLS.Litigation.Project.BillingModule.Entities.Case;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface CaseService {
+public class CaseService {
 
-    Case getCaseDetailsByCaseId(Long caseId);
+    public Case getCaseDetailsByCaseId(Long caseId) {
+        return null;
+    }
 }
-

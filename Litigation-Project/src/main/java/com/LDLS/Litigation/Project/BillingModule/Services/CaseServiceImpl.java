@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CaseServiceImpl implements CaseService {
+public class CaseServiceImpl extends CaseService {
 
     @Autowired
     private CaseRepository caseRepository;

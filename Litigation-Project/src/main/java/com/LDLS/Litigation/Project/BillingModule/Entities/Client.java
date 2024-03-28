@@ -1,9 +1,10 @@
 package com.LDLS.Litigation.Project.BillingModule.Entities;
 
-import com.LDLS.Litigation.Project.BillingModule.Entities.Case;
+import com.LDLS.Litigation.Project.BillingModule.Services.ClientService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,18 +14,26 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Client {
+
+    // ... existing class definition
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private String name;
-    private String contactNumber;
-    private String email;
     // ... other client details
 
-    @OneToMany(mappedBy = "client") // One client can have many cases
-    private List<Case> cases;  // List of associated cases
+    @Autowired
+    @Transient // Make ClientService transient if not meant for persistence
+    private ClientService clientService;
+
+    public Client fetchClientDetails(Long clientId) {
+        // Delegate client retrieval to the ClientService
+        return clientService.getClientById(clientId);
+    }
+
+//    @OneToMany(mappedBy = "client") // One client can have many cases
+//    private List<Case> cases;  // List of associated cases
 
     // Getters and Setters omitted for brevity
 }
-

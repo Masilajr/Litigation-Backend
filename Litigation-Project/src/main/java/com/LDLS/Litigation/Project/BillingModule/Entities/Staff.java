@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Entity
+@Entity( name="staff")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +19,7 @@ public class Staff {
     private String staffName;
     private String email;
     private String phone;
-    @JoinColumn(name = "staff_id") // Assuming a 'staff_id' column in time_tracking table
+
     @ManyToOne // Assuming a many-to-one relationship with TimeTracking
     private Staff assignedStaff; // Staff member assigned to time entries
     // ... other staff details (role, department etc.)

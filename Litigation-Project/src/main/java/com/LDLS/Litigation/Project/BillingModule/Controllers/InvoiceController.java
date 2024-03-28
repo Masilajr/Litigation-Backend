@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/invoices")
+@RequestMapping("api/v1/invoices")
 public class InvoiceController {
+    @Autowired
+    private InvoiceItemService invoiceService;
 
 //    @PostMapping
 //    public ResponseEntity<Invoice> createInvoice(@RequestBody List<InvoiceItem> invoiceItems) {
@@ -33,7 +35,6 @@ public class InvoiceController {
     }
     @PostMapping("/{invoiceId}/items")
     public ResponseEntity<InvoiceItem> createInvoiceItem(@PathVariable Long invoiceId, @RequestBody InvoiceItem item) {
-        InvoiceItemService invoiceService = null;
         InvoiceItem createdItem = invoiceService.createInvoiceItem(invoiceId, item);
         return ResponseEntity.ok(createdItem);
     }

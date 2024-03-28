@@ -35,7 +35,12 @@ public class InvoiceService {
     }
 
     public Optional<Invoice> findInvoiceById(Long id) {
-        return null;
+        Invoice invoice = new Invoice(); // Your logic to find the Invoice by id
+        if (invoice != null) {
+            return Optional.of(invoice);
+        } else {
+            return Optional.empty();
+        }
     }
     public InvoiceItem createInvoiceItem(Long invoiceId, InvoiceItem item) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
