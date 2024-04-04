@@ -8,6 +8,7 @@ import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 @Data
@@ -56,19 +57,26 @@ public class ClientManagement {
     private String transferringOffice;
     private Double amountRemaining;
     private String loanDescription;
+    private String department;
+    private String officer;
+    private Date deadline;
+    private String priority;
+    private String additionalInfo;
 
-    // active, pending, closed
-    private long activeCases;
-    private long pendingCases;
-    private long closedCases;
+    // active, pending, total
+    private long totalClients;
+    private long activeClients;
+    private long pendingClients;
+    private long litigationClients;
 
     private String status;
     private String details;
     private LocalDateTime lastUpdated;
 
-    public ClientManagement(long activeCases, long pendingCases, long closedCases) {
-        this.activeCases = activeCases;
-        this.pendingCases = pendingCases;
-        this.closedCases = closedCases;
+    public ClientManagement(long activeClients, long pendingClients, long litigationClients, long totalClients) {
+        this.activeClients = activeClients;
+        this.pendingClients = pendingClients;
+        this.litigationClients = litigationClients;
+        this.totalClients = totalClients;
     }
 }

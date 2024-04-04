@@ -17,27 +17,77 @@ public class ClientManagementService {
 
     @Autowired
     private ClientMangementRepository clientMangementRepository;
-    public long countActiveCases() {
+    public long countActiveClients() {
         return clientMangementRepository.countByStatus("active");
     }
-    public long countPendingCases() {
+
+    public long countPendingClients() {
         return clientMangementRepository.countByStatus("pending");
     }
-    public long countClosedCases() {
-        return clientMangementRepository.countByStatus("closed");
+
+    public long countTotalClients() {
+        // Assuming "total" means all clients regardless of status
+        return clientMangementRepository.count();
     }
 
-    public List<ClientManagement> getActiveCases() {
+    public long countLitigationClients() {
+        return clientMangementRepository.countByStatus("litigation");
+    }
+
+    public List<ClientManagement> getActiveClients() {
         return clientMangementRepository.findByStatus("active");
     }
 
-    public List<ClientManagement> getPendingCases() {
+    public List<ClientManagement> getPendingClients() {
         return clientMangementRepository.findByStatus("pending");
     }
 
-    public List<ClientManagement> getClosedCases() {
-        return clientMangementRepository.findByStatus("closed");
+    public List<ClientManagement> getLitigationClients() {
+        return clientMangementRepository.findByStatus("litigation");
     }
+
+    // Assuming "total" means all clients regardless of status
+    public List<ClientManagement> getTotalClients() {
+        return clientMangementRepository.findAll();
+    }
+
+
+    public EntityResponse assignOfficerToClient(Long id, ClientRequest request) {
+        EntityResponse response = new EntityResponse<>();
+        try {
+            ClientManagement client = clientMangementRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Client not found"));
+            client.setOfficer(request.getOfficer());
+            client.setAdditionalInfo(request.getAdditionalInfo());
+            client.setPriority(request.getPriority());
+            client.setDepartment(request.getDepartment());
+            client.setDeadline(request.getDeadline());
+            client.setStatus("Active");
+            clientMangementRepository.save(client);
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Client Assigned Successfully!");
+            response.setEntity(client);
+        }catch (RuntimeException e) {
+            System.err.println("Error assigning officer to client: " + e.getMessage());
+        }
+        return response;
+    }
+
+    public void transferClientToLitigation(String clientCode) {
+        try {
+            ClientManagement client = clientMangementRepository.findByClientCode(clientCode)
+                    .orElseThrow(() -> new RuntimeException("Client not found"));
+            // Update the client's status to indicate they have been transferred to Litigation
+            client.setStatus("Litigation");
+            // Optionally, log the transfer or perform other actions related to the transfer
+            // For example, you might want to update related entities or notify other parts of your application
+            clientMangementRepository.save(client);
+            System.out.println("Client " + clientCode + " has been transferred to Litigation.");
+        } catch (RuntimeException e) {
+            System.err.println("Error transferring client to Litigation: " + e.getMessage());
+        }
+    }
+
 
     public EntityResponse add(ClientManagement clientManagement) {
         EntityResponse entityResponse = new EntityResponse<>();
@@ -46,6 +96,7 @@ public class ClientManagementService {
             String randomDigits = String.format("%04d", new Random().nextInt(10000));
             String clientCode = "CAD" + "/" + dayMonth + "/" + randomDigits;
             clientManagement.setClientCode(clientCode);
+            clientManagement.setStatus("Pending");
             ClientManagement savedCase = clientMangementRepository.save(clientManagement);
             entityResponse.setMessage("Client added successfully");
             entityResponse.setStatusCode(HttpStatus.CREATED.value());
