@@ -1,5 +1,4 @@
 package com.LDLS.Litigation.Project.Dashboard;
-import com.LDLS.Litigation.Project.ClientManagement.ClientManagement;
 import com.LDLS.Litigation.Project.ClientManagement.ClientManagementService;
 import com.LDLS.Litigation.Project.Events.EventManagement;
 import com.LDLS.Litigation.Project.Events.EventManagementService;

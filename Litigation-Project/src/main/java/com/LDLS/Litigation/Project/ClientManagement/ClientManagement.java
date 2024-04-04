@@ -1,14 +1,9 @@
 package com.LDLS.Litigation.Project.ClientManagement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 @Data
@@ -20,7 +15,6 @@ public class ClientManagement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @NonNull
     private String firstName;
     private String middleName;
