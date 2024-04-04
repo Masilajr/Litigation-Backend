@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DashboardCases {
-    private long activeCases;
-    private long pendingCases;
-    private long closedCases;
 
-
+    private long totalClients;
+    private long activeClients;
+    private long pendingClients;
+    private long litigationClients;
 
 }

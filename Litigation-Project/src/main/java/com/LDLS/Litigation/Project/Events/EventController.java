@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("api/v1/eventmanagement")
+@CrossOrigin
 public class EventController {
     @Autowired
     EventManagementService eventManagementService;

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/auth")
 @Slf4j
+@CrossOrigin
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -419,7 +420,7 @@ public class AuthController {
             if (user.isPresent()){
                 Users existingUser = user.get();
                 existingUser.setPassword(encoder.encode(generatedPassword));
-                existingUser.setSystemGenPassword(true);
+                //existingUser.setSystemGenPassword(true);
                 existingUser.setModifiedBy(user.get().getUsername());
                 //newuser.setModifiedBy(newuser.getUsername());
                 existingUser.setModifiedOn(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
