@@ -2,9 +2,11 @@ package com.LDLS.Litigation.Project.BillingModule.Controllers;
 
 import com.LDLS.Litigation.Project.BillingModule.Entities.Invoice;
 import com.LDLS.Litigation.Project.BillingModule.Entities.InvoiceItem;
+import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceRepository;
 import com.LDLS.Litigation.Project.BillingModule.Services.InvoiceItemService;
 import com.LDLS.Litigation.Project.BillingModule.Services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +17,10 @@ import java.util.Optional;
 public class InvoiceController {
     @Autowired
     private InvoiceItemService invoiceService;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
-//    @PostMapping
+    //    @PostMapping
 //    public ResponseEntity<Invoice> createInvoice(@RequestBody List<InvoiceItem> invoiceItems) {
 //        Long clientId = // Extract client ID from request body or header (implementation specific)
 //                Invoice invoice = invoiceService.createInvoice(clientId, invoiceItems);
@@ -24,21 +28,26 @@ public class InvoiceController {
 //    }
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id) {
-        InvoiceService invoiceService = new InvoiceService();
+        InvoiceService invoiceService = new InvoiceService(invoiceRepository);
         Optional<Invoice> invoiceOptional = invoiceService.findInvoiceById(id);
-        if (invoiceOptional.isPresent()) {
-            return ResponseEntity.ok(invoiceOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
+        return invoiceOptional.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Invoice createInvoice(@RequestBody Invoice invoice) {
+        Long invoiceId = invoice.getId();
+        if (invoiceId== null){
+            throw new IllegalArgumentException("Invoice ID cannot be null");
         }
-
-    }
-    @PostMapping("/{invoiceId}/items")
-    public ResponseEntity<InvoiceItem> createInvoiceItem(@PathVariable Long invoiceId, @RequestBody InvoiceItem item) {
+        InvoiceItem item = new InvoiceItem();
         InvoiceItem createdItem = invoiceService.createInvoiceItem(invoiceId, item);
-        return ResponseEntity.ok(createdItem);
+        return invoice;
     }
 
-    // ... other invoice controller methods (optional)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Invoice updateInvoice(@PathVariable Long id, @RequestBody Invoice invoice) {
+        return invoice;
+    }
 }
-

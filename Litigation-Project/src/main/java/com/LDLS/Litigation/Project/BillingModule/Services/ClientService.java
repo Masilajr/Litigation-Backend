@@ -39,7 +39,7 @@ public class ClientService {
     public List<Client> findAllClients() {
         return clientRepository.findAll();
     }
-//
+
 //    //public Client getClientById(Long clientId) {
 //        // Local variable for the client ID
 //        Long searchedClientId = clientId;

@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table( name = "loan_case")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Case {
+public class LoanCase {
     @Id
     private Long id;
     private Long clientId;
@@ -19,13 +20,3 @@ public class Case {
     @JoinColumn(name = "client", nullable = false) // Single override
     private Client client;
 }
-
-//    private Long clientId; // Foreign key referencing Client
-//
-//    // Getters and Setters (omitted for brevity)
-//
-//    @ManyToOne
-//    @Column(name = "client_id")
-//    private Client client;
-//}
-
