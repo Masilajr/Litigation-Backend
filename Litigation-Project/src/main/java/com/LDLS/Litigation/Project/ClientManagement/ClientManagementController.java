@@ -16,8 +16,9 @@ public class ClientManagementController {
         return clientManagementService.add(clientManagement);
     }
 
-    @PutMapping("/update")
-    public EntityResponse update(@RequestBody ClientManagement clientManagement) {
+    @PutMapping("/update/{id}")
+    public EntityResponse update(@PathVariable Long id, @RequestBody ClientManagement clientManagement) {
+        clientManagement.setId(id);
         return clientManagementService.update(clientManagement);
     }
 
