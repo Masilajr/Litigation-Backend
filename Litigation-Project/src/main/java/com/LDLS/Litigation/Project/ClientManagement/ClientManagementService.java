@@ -16,46 +16,53 @@ import java.util.Random;
 public class ClientManagementService {
 
     @Autowired
-    private ClientMangementRepository clientMangementRepository;
+    private ClientManagementRepository clientManagementRepository;
     public long countActiveClients() {
-        return clientMangementRepository.countByStatus("active");
+        return clientManagementRepository.countByStatus("active");
     }
 
     public long countPendingClients() {
-        return clientMangementRepository.countByStatus("pending");
+        return clientManagementRepository.countByStatus("pending");
     }
 
     public long countTotalClients() {
         // Assuming "total" means all clients regardless of status
-        return clientMangementRepository.count();
+        return clientManagementRepository.count();
     }
 
     public long countLitigationClients() {
-        return clientMangementRepository.countByStatus("litigation");
+        return clientManagementRepository.countByStatus("litigation");
     }
 
     public List<ClientManagement> getActiveClients() {
-        return clientMangementRepository.findByStatus("active");
+        return clientManagementRepository.findByStatus("active");
     }
 
     public List<ClientManagement> getPendingClients() {
-        return clientMangementRepository.findByStatus("pending");
+        return clientManagementRepository.findByStatus("pending");
     }
 
     public List<ClientManagement> getLitigationClients() {
-        return clientMangementRepository.findByStatus("litigation");
+        return clientManagementRepository.findByStatus("litigation");
     }
 
     // Assuming "total" means all clients regardless of status
     public List<ClientManagement> getTotalClients() {
-        return clientMangementRepository.findAll();
+        return clientManagementRepository.findAll();
+    }
+
+    public List<ClientManagement> searchByClientOrLoan(String clientCode, Long loanAccNo) {
+        if (clientCode == null && loanAccNo == null) {
+            throw new IllegalArgumentException("At least one of clientCode or loanAccNo must be provided.");
+        }
+        return clientManagementRepository.findByClientCodeOrLoanAccNo(clientCode, loanAccNo);
     }
 
 
     public EntityResponse assignOfficerToClient(Long id, ClientRequest request) {
         EntityResponse response = new EntityResponse<>();
         try {
-            ClientManagement client = clientMangementRepository.findById(id)
+            ClientManagement client = clientManagementRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Client not found"));
             client.setOfficer(request.getOfficer());
             client.setAdditionalInfo(request.getAdditionalInfo());
@@ -63,7 +70,7 @@ public class ClientManagementService {
             client.setDepartment(request.getDepartment());
             client.setDeadline(request.getDeadline());
             client.setStatus("Active");
-            clientMangementRepository.save(client);
+            clientManagementRepository.save(client);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Client Assigned Successfully!");
             response.setEntity(client);
@@ -75,13 +82,13 @@ public class ClientManagementService {
 
     public void transferClientToLitigation(String clientCode) {
         try {
-            ClientManagement client = clientMangementRepository.findByClientCode(clientCode)
+            ClientManagement client = clientManagementRepository.findByClientCode(clientCode)
                     .orElseThrow(() -> new RuntimeException("Client not found"));
             // Update the client's status to indicate they have been transferred to Litigation
             client.setStatus("Litigation");
             // Optionally, log the transfer or perform other actions related to the transfer
             // For example, you might want to update related entities or notify other parts of your application
-            clientMangementRepository.save(client);
+            clientManagementRepository.save(client);
             System.out.println("Client " + clientCode + " has been transferred to Litigation.");
         } catch (RuntimeException e) {
             System.err.println("Error transferring client to Litigation: " + e.getMessage());
@@ -97,7 +104,7 @@ public class ClientManagementService {
             String clientCode = "CAD" + "/" + dayMonth + "/" + randomDigits;
             clientManagement.setClientCode(clientCode);
             clientManagement.setStatus("Pending");
-            ClientManagement savedCase = clientMangementRepository.save(clientManagement);
+            ClientManagement savedCase = clientManagementRepository.save(clientManagement);
             entityResponse.setMessage("Client added successfully");
             entityResponse.setStatusCode(HttpStatus.CREATED.value());
             entityResponse.setEntity(savedCase);
@@ -111,7 +118,7 @@ public class ClientManagementService {
 
     public EntityResponse update(ClientManagement clientManagement) {
         EntityResponse entityResponse = new EntityResponse<>();
-        Optional<ClientManagement> existingCase = clientMangementRepository.findById(clientManagement.getId());
+        Optional<ClientManagement> existingCase = clientManagementRepository.findById(clientManagement.getId());
         try {
             if (existingCase.isPresent()) {
                 ClientManagement clientManagement1 = existingCase.get();
@@ -119,7 +126,7 @@ public class ClientManagementService {
                 clientManagement1.setLoanAmount(clientManagement.getLoanAmount());
                 clientManagement1.setDefaultDate(clientManagement.getDefaultDate());
                 clientManagement1.setAmountRemaining(clientManagement.getAmountRemaining());
-                clientMangementRepository.save(clientManagement1);
+                clientManagementRepository.save(clientManagement1);
                 entityResponse.setMessage("Client updated successfully");
                 entityResponse.setStatusCode(HttpStatus.OK.value());
                 entityResponse.setEntity(clientManagement);
@@ -139,11 +146,9 @@ public class ClientManagementService {
 
     public EntityResponse read(Long id) {
         EntityResponse entityResponse = new EntityResponse<>();
-        Optional<ClientManagement> clientManagementOptional = clientMangementRepository.findById(id);
+        Optional<ClientManagement> clientManagementOptional = clientManagementRepository.findById(id);
         try {
             if (clientManagementOptional.isPresent()) {
-                //ClientManagement retrievedcaseManagement = caseManagementOptional.get();
-
                 entityResponse.setMessage("case retrieved successfully" + id);
                 entityResponse.setStatusCode(HttpStatus.FOUND.value());
                 entityResponse.setEntity(clientManagementOptional);
@@ -161,10 +166,10 @@ public class ClientManagementService {
     }
     public EntityResponse delete(Long id){
         EntityResponse entityResponse =new EntityResponse<>();
-        Optional<ClientManagement> caseManagementOptional = clientMangementRepository.findById(id);
+        Optional<ClientManagement> caseManagementOptional = clientManagementRepository.findById(id);
         try{
             if (caseManagementOptional.isPresent()){
-                clientMangementRepository.deleteById(id);
+                clientManagementRepository.deleteById(id);
                 entityResponse.setMessage("Client deleted successfully");
                 entityResponse.setStatusCode(HttpStatus.OK.value());
                 entityResponse.setEntity("");
@@ -180,6 +185,6 @@ public class ClientManagementService {
         return entityResponse;
     }
     public List<ClientManagement> findAllClients() {
-        return clientMangementRepository.findAll();
+        return clientManagementRepository.findAll();
     }
 }

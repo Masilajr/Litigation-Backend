@@ -42,6 +42,11 @@ public class ClientManagementController {
         return clientManagementService.assignOfficerToClient(id, request);
     }
 
+    @GetMapping("/search")
+    public List<ClientManagement> search(@RequestParam(required = false) String clientCode, @RequestParam(required = false) Long loanAccNo) {
+        return clientManagementService.searchByClientOrLoan(clientCode, loanAccNo);
+    }
+
     @PostMapping("/transfer-to-litigation")
     public EntityResponse<String> transferClientToLitigation(@RequestParam(required = false) String clientCode) {
         EntityResponse<String> response = new EntityResponse<>();
