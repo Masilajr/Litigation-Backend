@@ -48,6 +48,7 @@ public class ClientManagementController {
         return clientManagementService.searchByClientOrLoan(clientCode, loanAccNo);
     }
 
+
     @PostMapping("/transfer-to-litigation")
     public EntityResponse<String> transferClientToLitigation(@RequestParam(required = false) String clientCode) {
         EntityResponse<String> response = new EntityResponse<>();
