@@ -118,26 +118,70 @@ public class ClientManagementService {
 
     public EntityResponse update(ClientManagement clientManagement) {
         EntityResponse entityResponse = new EntityResponse<>();
-        Optional<ClientManagement> existingCase = clientManagementRepository.findById(clientManagement.getId());
+        Optional<ClientManagement> existingClient = clientManagementRepository.findById(clientManagement.getId());
         try {
-            if (existingCase.isPresent()) {
-                ClientManagement clientManagement1 = existingCase.get();
-                clientManagement1.setLoanDescription(clientManagement.getLoanDescription());
-                clientManagement1.setLoanAmount(clientManagement.getLoanAmount());
+            if (existingClient.isPresent()) {
+                ClientManagement clientManagement1 = existingClient.get();
+                // Update all fields from clientManagement to clientManagement1
+                clientManagement1.setFirstName(clientManagement.getFirstName());
+                clientManagement1.setMiddleName(clientManagement.getMiddleName());
+                clientManagement1.setLastName(clientManagement.getLastName());
+                clientManagement1.setIdNumber(clientManagement.getIdNumber());
+                clientManagement1.setKraPin(clientManagement.getKraPin());
+                clientManagement1.setEmailAddr(clientManagement.getEmailAddr());
+                clientManagement1.setPhoneNo1(clientManagement.getPhoneNo1());
+                clientManagement1.setPostalAddress(clientManagement.getPostalAddress());
+                clientManagement1.setPostalCode(clientManagement.getPostalCode());
+                clientManagement1.setCity(clientManagement.getCity());
+                clientManagement1.setCountry(clientManagement.getCountry());
+                //clientManagement1.setClientCode(clientManagement.getClientCode());
+                clientManagement1.setLoanAccNo(clientManagement.getLoanAccNo());
+                clientManagement1.setOriginalLoanAmount(clientManagement.getOriginalLoanAmount());
+                clientManagement1.setInterestRate(clientManagement.getInterestRate());
+                clientManagement1.setStartDate(clientManagement.getStartDate());
+                clientManagement1.setEndDate(clientManagement.getEndDate());
+                clientManagement1.setOutPrincipal(clientManagement.getOutPrincipal());
+                clientManagement1.setOutInterest(clientManagement.getOutInterest());
+                clientManagement1.setLastAccrualDate(clientManagement.getLastAccrualDate());
+                clientManagement1.setLastPaymentDate(clientManagement.getLastPaymentDate());
+                clientManagement1.setLastPayReceived(clientManagement.getLastPayReceived());
+                clientManagement1.setLastIntAppDate(clientManagement.getLastIntAppDate());
+                clientManagement1.setUserAssetClass(clientManagement.getUserAssetClass());
+                clientManagement1.setClassificationDate(clientManagement.getClassificationDate());
+                clientManagement1.setLoanTenor(clientManagement.getLoanTenor());
+                clientManagement1.setDefaultReason(clientManagement.getDefaultReason());
                 clientManagement1.setDefaultDate(clientManagement.getDefaultDate());
+                clientManagement1.setTransferringOffice(clientManagement.getTransferringOffice());
                 clientManagement1.setAmountRemaining(clientManagement.getAmountRemaining());
+                clientManagement1.setLoanDescription(clientManagement.getLoanDescription());
+                clientManagement1.setDepartment(clientManagement.getDepartment());
+                clientManagement1.setOfficer(clientManagement.getOfficer());
+                clientManagement1.setDeadline(clientManagement.getDeadline());
+                clientManagement1.setPriority(clientManagement.getPriority());
+                clientManagement1.setAdditionalInfo(clientManagement.getAdditionalInfo());
+                clientManagement1.setTotalClients(clientManagement.getTotalClients());
+                clientManagement1.setActiveClients(clientManagement.getActiveClients());
+                clientManagement1.setPendingClients(clientManagement.getPendingClients());
+                clientManagement1.setLitigationClients(clientManagement.getLitigationClients());
+                //clientManagement1.setStatus(clientManagement.getStatus());
+                clientManagement1.setDetails(clientManagement.getDetails());
+                clientManagement1.setLastUpdated(clientManagement.getLastUpdated());
+                clientManagement1.setLoanAmount(clientManagement.getLoanAmount());
+                clientManagement1.setPhoneNo2(clientManagement.getPhoneNo2());
+
+                // Save the updated entity
                 clientManagementRepository.save(clientManagement1);
                 entityResponse.setMessage("Client updated successfully");
                 entityResponse.setStatusCode(HttpStatus.OK.value());
-                entityResponse.setEntity(clientManagement);
+                entityResponse.setEntity(clientManagement1); // Return the updated entity
 
             } else {
-                entityResponse.setMessage("client id not found");
+                entityResponse.setMessage("Client id not found");
                 entityResponse.setStatusCode(HttpStatus.NO_CONTENT.value());
                 entityResponse.setEntity(null);
             }
         } catch (Exception e) {
-            entityResponse.setMessage("An error has occurred while trying to update a client {}" + e);
+            entityResponse.setMessage("An error has occurred while trying to update a client: " + e.getMessage());
             entityResponse.setEntity("");
             entityResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }

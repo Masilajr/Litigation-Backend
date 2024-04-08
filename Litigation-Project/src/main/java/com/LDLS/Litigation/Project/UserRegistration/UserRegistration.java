@@ -21,6 +21,7 @@ public class UserRegistration {
     private String middleName;
     @NonNull
     private String lastName;
+    private String userId;
     private String email;
     private Long phoneNumber;
     private String branch;

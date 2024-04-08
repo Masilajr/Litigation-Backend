@@ -9,7 +9,7 @@ import java.util.Date;
 public class ClientRequest {
     private String department;
     private String officer;
-    private Date deadline;
+    private LocalDate deadline;
     private String priority;
     private String additionalInfo;
 }
