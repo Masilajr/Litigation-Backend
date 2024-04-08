@@ -11,6 +11,8 @@ public class ClientManagementController {
     @Autowired
     ClientManagementService clientManagementService;
 
+
+
     @PostMapping("/add")
     public EntityResponse add(@RequestBody ClientManagement clientManagement) {
         return clientManagementService.add(clientManagement);
@@ -49,6 +51,9 @@ public class ClientManagementController {
     }
 
 
+
+    //specified the type parameter for EntityResponse in your controller
+    //to update other responses as well
     @PostMapping("/transfer-to-litigation")
     public EntityResponse<String> transferClientToLitigation(@RequestParam(required = false) String clientCode) {
         EntityResponse<String> response = new EntityResponse<>();
