@@ -66,6 +66,7 @@ public class ClientManagement {
     private String status;
     private String details;
     private LocalDateTime lastUpdated;
+    private Date classificationDate;
 
     public ClientManagement(long activeClients, long pendingClients, long litigationClients, long totalClients) {
         this.activeClients = activeClients;
@@ -73,4 +74,7 @@ public class ClientManagement {
         this.litigationClients = litigationClients;
         this.totalClients = totalClients;
     }
+
+
+
 }

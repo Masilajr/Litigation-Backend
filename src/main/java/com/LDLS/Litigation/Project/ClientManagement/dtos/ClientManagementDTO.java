@@ -1,9 +1,12 @@
 package com.LDLS.Litigation.Project.ClientManagement.dtos;
 import lombok.Data;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 @Data
-public class ClientManagementDTO {
+public class ClientManagementDTO implements Serializable {
     private Long id;
     private String firstName;
     private String middleName;
@@ -22,25 +25,25 @@ public class ClientManagementDTO {
     private Long loanAccNo;
     private Double originalLoanAmount;
     private String interestRate;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Date startDate;
+    private Date endDate;
     private String outPrincipal;
     private String outInterest;
-    private LocalDateTime lastAccrualDate;
-    private LocalDateTime lastPaymentDate;
+    private Date lastAccrualDate;
+    private Date lastPaymentDate;
     private String lastPayReceived;
-    private LocalDateTime lastIntAppDate;
+    private Date lastIntAppDate;
     private String userAssetClass;
-    private LocalDateTime classificationDate;
+    private Date classificationDate;
     private String loanTenor;
     private String defaultReason;
-    private LocalDateTime defaultDate;
+    private Date defaultDate;
     private String transferringOffice;
     private Double amountRemaining;
     private String loanDescription;
     private String department;
     private String officer;
-    private LocalDateTime deadline;
+    private Date deadline;
     private String priority;
     private String additionalInfo;
     private long totalClients;
@@ -49,6 +52,7 @@ public class ClientManagementDTO {
     private long litigationClients;
     private String status;
     private String details;
+    @Setter
     private LocalDateTime lastUpdated;
 
 }

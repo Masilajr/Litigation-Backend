@@ -1,6 +1,5 @@
 package com.LDLS.Litigation.Project.ClientManagement.messages;
-
-import com.LDLS.Litigation.Project.ClientManagement.dto.ClientManagementDTO;
+import com.LDLS.Litigation.Project.ClientManagement.dtos.ClientManagementDTO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
