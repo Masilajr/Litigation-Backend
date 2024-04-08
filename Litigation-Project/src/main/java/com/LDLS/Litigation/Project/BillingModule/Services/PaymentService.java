@@ -3,15 +3,11 @@ package com.LDLS.Litigation.Project.BillingModule.Services;
 import com.LDLS.Litigation.Project.BillingModule.Entities.Invoice;
 import com.LDLS.Litigation.Project.BillingModule.Entities.PaymentMethod;
 import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceRepository;
-import org.apache.commons.collections.ExtendedProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.LDLS.Litigation.Project.BillingModule.Entities.PaymentMethod.BANK_TRANSFER;
-import static com.LDLS.Litigation.Project.BillingModule.Entities.PaymentMethod.CASH;
 
 @Service
 public class PaymentService {
@@ -26,17 +22,34 @@ public class PaymentService {
                 case BANK_TRANSFER:
                     processBankTransferPayment(invoice);
                     break;
+                case CHEQUE:
+                    processChequePayment(invoice);
+                    break;
                 default:
                     throw new IllegalArgumentException("Unsupported payment method: " + paymentMethod);
             }
         }
 
-        private void processCashPayment(Invoice invoice) {
-            invoice.markAsPaid();
-            invoiceRepository.save(invoice);
+    private void processPayment(Invoice invoice) {
+        if (invoice.getPaymentMethod().equals("cheque")) {
+            processChequePayment(invoice);
+        } else if (invoice.getPaymentMethod().equals("cash")) {
+            processCashPayment(invoice);
+        } else {
+            throw new IllegalArgumentException("Unsupported payment method: " + invoice.getPaymentMethod());
         }
+    }
+    private void processChequePayment(Invoice invoice) {
+        // Implementation for processing credit card payment
+        // This could involve calling an external payment gateway API
+        System.out.println("Processing cheque payment for invoice: " + invoice.getId());
+    }
 
-        private void processBankTransferPayment(Invoice invoice) {
+    private void processCashPayment(Invoice invoice) {
+        invoice.markAsPaid();
+        invoiceRepository.save(invoice);
+    }
+    private void processBankTransferPayment(Invoice invoice) {
             boolean transferSuccessful = initiateBankTransfer(invoice);
             if (transferSuccessful) {
                 invoice.markAsPaid();
@@ -47,7 +60,6 @@ public class PaymentService {
         }
 
     private boolean initiateBankTransfer(Invoice invoice) {
-        // Define the URL of the bank transfer API
         String bankTransferApiUrl = "https://example.com/bank-transfer";
 
         WebClient webClient = WebClient.create();
@@ -65,9 +77,5 @@ public class PaymentService {
                 .onErrorReturn(false).block());
     }
     }
-
-
-//        private void processChequePayment(Invoice invoice) {
-//            // Implement cheque payment logic
 
 

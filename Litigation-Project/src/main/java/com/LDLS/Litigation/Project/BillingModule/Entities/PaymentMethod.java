@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Entity
 public enum PaymentMethod {
         CASH,
-        BANK_TRANSFER;
+        BANK_TRANSFER,
+        CHEQUE;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,14 +3,18 @@ package com.LDLS.Litigation.Project.BillingModule.Entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.DoubleStream;
+
+import static org.apache.commons.math3.util.MathUtils.reduce;
 
 @Entity
 @Data
@@ -21,27 +25,80 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Invoice number cannot be null")
+    private String invoiceNumber;
+
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-
-    @ManyToOne
-    @JoinColumn(name = "client_id") // Assuming 'client_id' is the foreign key column in the database
-    private Client client; // Foreign key referencing Client
-
-    @NotBlank(message = "Invoice number cannot be blank")
-    private String invoiceNumber; // Unique identifier for the invoice
     private Date invoiceDate;
     private BigDecimal totalAmount;
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL) // Cascade changes to InvoiceItems
-    private List<InvoiceItem> items = new ArrayList<>(); // Initialize an empty list
+    public void setClient(Client client) {
+    }
 
-    // Lombok @Data generates getters and setters, so no need to manually define them unless you want to customize them
+    public static class InvoiceItem {
+        private final List<InvoiceItem> items;
+
+        public InvoiceItem() {
+            this.items = new ArrayList<>();
+        }
+
+        public void addItem(InvoiceItem item) {
+            this.items.add(item);
+        }
+
+        public List<InvoiceItem> getItems() {
+            return this.items;
+        }
+
+        public static double getAmount(double v) {
+            return v;
+        }
+
+        public void setInvoice(Invoice invoice) {
+        }
+
+    }
+    public static BigDecimal getTotal(Invoice invoice) {
+        List<Double> invoiceItemQuantities = Arrays.asList(2.5, 1.0, 3.75);
+        BigDecimal totalQuantity = invoiceItemQuantities.stream()
+                .map(BigDecimal::valueOf)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return totalQuantity;
+    }
+
+    @ManyToOne
+    private Client client;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<InvoiceItem> items = new ArrayList<>();
+
     public void addItem(InvoiceItem item) {
         items.add(item);
-        item.setInvoice(this); // Ensure the InvoiceItem is aware of its parent Invoice
+        item.setInvoice(this);
     }
 
     public void markAsPaid() {
     }
+
+    public void add(Invoice item) {
+    }
+
+    public Invoice get() {
+        return null;
+    }
+
+    public void setInvoice(Invoice invoice) {
+    }
+
+    public DoubleStream stream() {
+        return null;
+    }
+    public void set(List<Invoice> items) {
+    }
+
+    public Invoice getItems() {
+        return null;
+    }
+
 }

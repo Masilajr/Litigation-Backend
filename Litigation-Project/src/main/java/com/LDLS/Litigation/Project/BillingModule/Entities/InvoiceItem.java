@@ -16,17 +16,15 @@ public class InvoiceItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description; // Description of the service or expense
-    private BigDecimal quantity; // Quantity of the item (e.g., hours for time-based fees)
-    private BigDecimal rate; // Hourly rate or flat fee
-    @ManyToOne(cascade = CascadeType.PERSIST) // Assuming you want to save Invoice with InvoiceItem
+    private String description;
+    private BigDecimal quantity;
+    private BigDecimal rate;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Invoice invoice;
 
     public BigDecimal getTotal() {
-
         return quantity.multiply(rate);
     }
-
-    // Getters and Setters omitted for brevity
 }
 
