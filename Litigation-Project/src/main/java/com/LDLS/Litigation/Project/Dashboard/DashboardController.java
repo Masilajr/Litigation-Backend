@@ -1,7 +1,5 @@
 package com.LDLS.Litigation.Project.Dashboard;
 import com.LDLS.Litigation.Project.ClientManagement.ClientManagementService;
-import com.LDLS.Litigation.Project.Events.EventManagement;
-import com.LDLS.Litigation.Project.Events.EventManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,7 @@ import java.util.List;
 public class DashboardController {
     @Autowired
     ClientManagementService clientManagementService;
-    @Autowired
-    EventManagementService eventManagementService;
+
 
 //    @GetMapping("/active")
 //    public List<ClientManagement> getActiveClients() {
@@ -58,9 +55,4 @@ public long getTotalClientsCount() {
         return clientManagementService.countLitigationClients();
     }
 
-    @GetMapping("/events")
-    public ResponseEntity<List<EventManagement>> getUpcomingEvents() {
-        List<EventManagement> events = eventManagementService.getUpcomingEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
 }

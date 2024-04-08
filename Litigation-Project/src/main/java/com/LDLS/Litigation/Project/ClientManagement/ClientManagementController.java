@@ -2,6 +2,7 @@ package com.LDLS.Litigation.Project.ClientManagement;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
@@ -69,4 +70,23 @@ public class ClientManagementController {
         }
         return response;
     }
+
+
+
+//        @PreAuthorize("hasRole('ROLE_ADMIN')")
+//        @PostMapping("/add")
+//        public EntityResponse add(@RequestBody ClientManagement clientManagement) {
+//            return clientManagementService.add(clientManagement);
+//        }
+//
+//        @PreAuthorize("hasRole('ROLE_ADMIN')")
+//        @PutMapping("/update/{id}")
+//        public EntityResponse update(@PathVariable Long id, @RequestBody ClientManagement clientManagement) {
+//            clientManagement.setId(id);
+//            return clientManagementService.update(clientManagement);
+//        }
+//
+//        // Other methods remain unchanged
+//    }
+
 }

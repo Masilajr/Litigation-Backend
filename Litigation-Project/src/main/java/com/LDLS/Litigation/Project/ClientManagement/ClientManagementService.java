@@ -84,10 +84,7 @@ public class ClientManagementService {
         try {
             ClientManagement client = clientManagementRepository.findByClientCode(clientCode)
                     .orElseThrow(() -> new RuntimeException("Client not found"));
-            // Update the client's status to indicate they have been transferred to Litigation
             client.setStatus("Litigation");
-            // Optionally, log the transfer or perform other actions related to the transfer
-            // For example, you might want to update related entities or notify other parts of your application
             clientManagementRepository.save(client);
             System.out.println("Client " + clientCode + " has been transferred to Litigation.");
         } catch (RuntimeException e) {
