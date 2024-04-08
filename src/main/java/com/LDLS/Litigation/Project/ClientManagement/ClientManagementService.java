@@ -198,4 +198,62 @@ public class ClientManagementService {
     public List<ClientManagement> findAllClients() {
         return clientManagementRepository.findAll();
     }
+
+    //Manually Map fields from ClientManagement to ClientManagementDTO
+    // need to change later
+    private ClientManagementDTO convertToDTO(ClientManagement clientManagement) {
+        ClientManagementDTO clientManagementDTO = new ClientManagementDTO();
+
+
+        clientManagementDTO.setId(clientManagement.getId());
+        clientManagementDTO.setFirstName(clientManagement.getFirstName());
+        clientManagementDTO.setMiddleName(clientManagement.getMiddleName());
+        clientManagementDTO.setLastName(clientManagement.getLastName());
+        clientManagementDTO.setIdNumber(clientManagement.getIdNumber());
+        clientManagementDTO.setKraPin(clientManagement.getKraPin());
+        clientManagementDTO.setEmailAddr(clientManagement.getEmailAddr());
+        clientManagementDTO.setPhoneNo1(clientManagement.getPhoneNo1());
+        clientManagementDTO.setPhoneNo2(clientManagement.getPhoneNo2());
+        clientManagementDTO.setPostalAddress(clientManagement.getPostalAddress());
+        clientManagementDTO.setPostalCode(clientManagement.getPostalCode());
+        clientManagementDTO.setCity(clientManagement.getCity());
+        clientManagementDTO.setCountry(clientManagement.getCountry());
+        clientManagementDTO.setLoanAmount(clientManagement.getLoanAmount());
+        clientManagementDTO.setClientCode(clientManagement.getClientCode());
+        clientManagementDTO.setLoanAccNo(clientManagement.getLoanAccNo());
+        clientManagementDTO.setOriginalLoanAmount(clientManagement.getOriginalLoanAmount());
+        clientManagementDTO.setInterestRate(clientManagement.getInterestRate());
+        clientManagementDTO.setStartDate(clientManagement.getStartDate());
+        clientManagementDTO.setEndDate(clientManagement.getEndDate());
+        clientManagementDTO.setOutPrincipal(clientManagement.getOutPrincipal());
+        clientManagementDTO.setOutInterest(clientManagement.getOutInterest());
+        clientManagementDTO.setLastAccrualDate(clientManagement.getLastAccrualDate());
+        clientManagementDTO.setLastPaymentDate(clientManagement.getLastPaymentDate());
+        clientManagementDTO.setLastPayReceived(clientManagement.getLastPayReceived());
+        clientManagementDTO.setLastIntAppDate(clientManagement.getLastIntAppDate());
+        clientManagementDTO.setUserAssetClass(clientManagement.getUserAssetClass());
+        clientManagementDTO.setClassificationDate(clientManagement.getClassificationDate());
+        clientManagementDTO.setLoanTenor(clientManagement.getLoanTenor());
+        clientManagementDTO.setDefaultReason(clientManagement.getDefaultReason());
+        clientManagementDTO.setDefaultDate(clientManagement.getDefaultDate());
+        clientManagementDTO.setTransferringOffice(clientManagement.getTransferringOffice());
+        clientManagementDTO.setAmountRemaining(clientManagement.getAmountRemaining());
+        clientManagementDTO.setLoanDescription(clientManagement.getLoanDescription());
+        clientManagementDTO.setDepartment(clientManagement.getDepartment());
+        clientManagementDTO.setOfficer(clientManagement.getOfficer());
+        clientManagementDTO.setDeadline(clientManagement.getDeadline());
+        clientManagementDTO.setPriority(clientManagement.getPriority());
+        clientManagementDTO.setAdditionalInfo(clientManagement.getAdditionalInfo());
+        clientManagementDTO.setTotalClients(clientManagement.getTotalClients());
+        clientManagementDTO.setActiveClients(clientManagement.getActiveClients());
+        clientManagementDTO.setPendingClients(clientManagement.getPendingClients());
+        clientManagementDTO.setLitigationClients(clientManagement.getLitigationClients());
+        clientManagementDTO.setStatus(clientManagement.getStatus());
+        clientManagementDTO.setDetails(clientManagement.getDetails());
+        clientManagementDTO.setLastUpdated(clientManagement.getLastUpdated());
+
+        return clientManagementDTO;
+    }
+
+
 }
