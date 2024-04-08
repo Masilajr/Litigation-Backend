@@ -1,0 +1,16 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=felix
+      - RABBITMQ_DEFAULT_PASS=56725672
+
+  Litigation:
+    build: .
+    ports:
+      - "8081:8080"
+    depends_on:
+      - rabbitmq
