@@ -1,5 +1,7 @@
 package com.LDLS.Litigation.Project.ClientManagement;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
+import com.LDLS.Litigation.Project.ClientManagement.dtos.ClientManagementDTO;
+import com.LDLS.Litigation.Project.ClientManagement.messages.ClientManagementMessageProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +16,14 @@ import java.util.Random;
 @Slf4j
 @Configuration
 public class ClientManagementService {
-
+    private final ClientManagementMessageProducer clientManagementMessageProducer;
     @Autowired
     private ClientManagementRepository clientManagementRepository;
+
+    public ClientManagementService(ClientManagementMessageProducer clientManagementMessageProducer) {
+        this.clientManagementMessageProducer = clientManagementMessageProducer;
+    }
+
     public long countActiveClients() {
         return clientManagementRepository.countByStatus("active");
     }
@@ -84,11 +91,15 @@ public class ClientManagementService {
         try {
             ClientManagement client = clientManagementRepository.findByClientCode(clientCode)
                     .orElseThrow(() -> new RuntimeException("Client not found"));
-            // Update the client's status to indicate they have been transferred to Litigation
+
             client.setStatus("Litigation");
-            // Optionally, log the transfer or perform other actions related to the transfer
-            // For example, you might want to update related entities or notify other parts of your application
+
             clientManagementRepository.save(client);
+
+            ClientManagementDTO clientManagementDTO = convertToDTO(client);
+
+            clientManagementMessageProducer.sendMessage(clientManagementDTO);
+
             System.out.println("Client " + clientCode + " has been transferred to Litigation.");
         } catch (RuntimeException e) {
             System.err.println("Error transferring client to Litigation: " + e.getMessage());
