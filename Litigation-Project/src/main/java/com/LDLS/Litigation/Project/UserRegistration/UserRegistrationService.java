@@ -5,8 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 @Service
 @Slf4j
 public class UserRegistrationService {
@@ -26,6 +31,10 @@ public class UserRegistrationService {
     public EntityResponse createUserRegistration(UserRegistration userRegistration) {
         EntityResponse response = new EntityResponse<>();
         try {
+            String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
+            String randomDigits = String.format("%04d", new Random().nextInt(10000));
+            String userId = "USER" + "/" + dayMonth + "/" + randomDigits;
+            userRegistration.setUserId(userId);
             Optional<UserRegistration> user = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
             if (user.isPresent()) {
                 response.setMessage("Provided user National Id already exists!!");
@@ -56,6 +65,7 @@ public class UserRegistrationService {
                     userRegistration.setFirstName(newUserRegistration.getFirstName());
                     userRegistration.setMiddleName(newUserRegistration.getMiddleName());
                     userRegistration.setLastName(newUserRegistration.getLastName());
+                    userRegistration.setUsername(newUserRegistration.getUsername());
                     userRegistration.setTemporaryPassword(newUserRegistration.getTemporaryPassword());
                     userRegistration.setEmail(newUserRegistration.getEmail());
                     userRegistration.setNationalIdNumber(newUserRegistration.getNationalIdNumber());
