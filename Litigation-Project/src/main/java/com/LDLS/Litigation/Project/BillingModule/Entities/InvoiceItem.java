@@ -1,30 +1,18 @@
-package com.LDLS.Litigation.Project.BillingModule.Entities;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
-
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class InvoiceItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String description;
-    private BigDecimal quantity;
-    private BigDecimal rate;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Invoice invoice;
-
-    public BigDecimal getTotal() {
-        return quantity.multiply(rate);
-    }
-}
-
+//package com.LDLS.Litigation.Project.BillingModule.Entities;
+//
+//import lombok.Data;
+//
+//import javax.persistence.*;
+//
+//@Entity
+//@Data
+//public class InvoiceItem {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private String description;
+//    private Double amount;
+//
+//    @ManyToOne
+//    private Invoice invoice;
+//}
