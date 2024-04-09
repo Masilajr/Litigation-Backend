@@ -3,8 +3,11 @@ import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import com.LDLS.Litigation.Project.UserRegistration.UserRegistrationService;
 import com.LDLS.Litigation.Project.UserRegistration.UserRegistrationController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,9 +24,10 @@ public class UserRegistrationController {
             EntityResponse response = userRegistrationService.createUserRegistration(userRegistration);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<UserRegistration> getuserRegistrationById(@PathVariable Long id) {
         return userRegistrationService.getUserRegistrationById(id)
@@ -50,4 +54,5 @@ public class UserRegistrationController {
         EntityResponse response = userRegistrationService.deleteUserRegistrationById(id);
         return ResponseEntity.ok(response);
     }
+
 }
