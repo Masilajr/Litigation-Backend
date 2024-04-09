@@ -48,4 +48,9 @@ public class EventService {
     public List<Event> findUpcomingEvents(LocalDate today) {
         return this.eventRepository.findAllByEventDateGreaterThanEqual(today);
     }
+
+    // Added search functionality
+    public List<Event> searchEventsByTitle(String title) {
+        return this.eventRepository.findAllByShortTitle(title);
+    }
 }

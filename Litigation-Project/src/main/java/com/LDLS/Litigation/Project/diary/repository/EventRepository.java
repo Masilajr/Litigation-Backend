@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.date >= :date")
     List<Event> findAllByEventDateGreaterThanEqual(LocalDate date);
+    List<Event> findAllByShortTitle(String title);
 }
