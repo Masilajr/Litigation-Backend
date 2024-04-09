@@ -74,4 +74,9 @@ public class ClientManagement {
         this.litigationClients = litigationClients;
         this.totalClients = totalClients;
     }
+
+    public ClientManagement(String loanDescription, String outPrincipal) {
+        this.loanDescription = loanDescription;
+        this.outPrincipal = outPrincipal;
+    }
 }
