@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/mutua
+    url: jdbc:mariadb://localhost:3308/mutua
     username: root
     password: 5418feliX
   #
