@@ -5,9 +5,11 @@ import com.LDLS.Litigation.Project.diary.service.GoogleCalendarService;
 import com.google.api.services.calendar.model.Event;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+
 public class CalendarController {
 
     private final GoogleCalendarService googleCalendarService;

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
 @CrossOrigin
 @RestController
 @RequestMapping({"/api/tasks"})
@@ -61,11 +63,24 @@ public class TaskController {
         return task == null ? new ResponseEntity(HttpStatus.NOT_FOUND) : new ResponseEntity(task, HttpStatus.OK);
     }
 
-    @DeleteMapping({"/delete"})
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        this.taskService.deleteTask(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+    @DeleteMapping({"/delete/{id}"})
+    public ResponseEntity<EntityResponse> deleteTaskById(@PathVariable Long id) {
+        EntityResponse response = new EntityResponse();
+        try {
+            this.taskService.deleteTask(id);
+            response.setMessage("Task deleted successfully");
+            response.setStatusCode(HttpStatus.NO_CONTENT.value());
+            log.info("Task deleted successfully: {}", id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        } catch (EntityNotFoundException e) {
+            response.setMessage("Task not found");
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            log.error("Error deleting task: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
+
     @GetMapping("/search")
     public ResponseEntity<List<Task>> searchTasks(@RequestParam String title) {
         List<Task> tasks = taskService.searchTasks(title);
