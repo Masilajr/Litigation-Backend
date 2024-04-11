@@ -1,10 +1,13 @@
 package com.LDLS.Litigation.Project.Litigation.controllers;
+import com.LDLS.Litigation.Project.Litigation.dtos.LitigationCaseDTO;
 import com.LDLS.Litigation.Project.Litigation.services.LitigationCaseInitiator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/litigation")
@@ -20,5 +23,10 @@ public class LitigationCaseController {
     @GetMapping("/process/{caseId}")
     public void processCase(@PathVariable String caseId) {
         litigationCaseInitiator.fetchAndProcessCaseData(caseId);
+    }
+
+    @GetMapping("/all")
+    public List<LitigationCaseDTO> getAllLitigationCases() {
+        return litigationCaseInitiator.getAllLitigationCases();
     }
 }

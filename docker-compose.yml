@@ -8,7 +8,7 @@ services:
       - RABBITMQ_DEFAULT_USER=felix
       - RABBITMQ_DEFAULT_PASS=56725672
 
-  Litigation:
+  litigation:
     build: .
     ports:
       - "8081:8080"

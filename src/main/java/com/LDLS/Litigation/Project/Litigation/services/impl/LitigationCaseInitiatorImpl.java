@@ -14,6 +14,8 @@ import org.springframework.validation.Validator;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LitigationCaseInitiatorImpl implements LitigationCaseInitiator {
@@ -60,5 +62,16 @@ public class LitigationCaseInitiatorImpl implements LitigationCaseInitiator {
                 System.err.println("Failed to process fetched case data: " + e.getMessage());
             }
         });
+    }
+    @Override
+    public List<LitigationCaseDTO> getAllLitigationCases() {
+        List<LitigationCase> litigationCases = caseRepository.findAll();
+        return litigationCases.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private LitigationCaseDTO convertToDto(LitigationCase litigationCase) {
+        return modelMapper.map(litigationCase, LitigationCaseDTO.class);
     }
 }

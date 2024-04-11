@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/mutua
     username: root
-    password: Bhartem55
+    password: 5418feliX
   #
   #    url: jdbc:mariadb://52.15.152.26:3306/LITIGATION
   #    username: emtech
