@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/userRegistration")
@@ -19,9 +20,10 @@ public class UserRegistrationController {
     private UserRegistrationService userRegistrationService;
 
     @PostMapping("/create")
-    public ResponseEntity<EntityResponse> createUserRegistration(@RequestBody UserRegistration userRegistration) {
+    public ResponseEntity<EntityResponse> createUserRegistration(@RequestBody UserRegistration userRegistration,
+                                                                 @RequestBody Set<Privilege> privileges) {
         try {
-            EntityResponse response = userRegistrationService.createUserRegistration(userRegistration);
+            EntityResponse response = userRegistrationService.createUserRegistration(userRegistration, privileges);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

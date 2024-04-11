@@ -35,4 +35,10 @@ public class UserRegistration {
     private String accessPeriod;
     private String country;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_privileges",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id"))
+    private Set<Privilege> privileges = new HashSet<>();
+
 }

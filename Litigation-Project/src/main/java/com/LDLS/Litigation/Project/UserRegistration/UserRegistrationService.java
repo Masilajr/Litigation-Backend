@@ -30,7 +30,7 @@ public class UserRegistrationService {
         return userRegistrationRepository.findById(id);
     }
 
-    public EntityResponse createUserRegistration(UserRegistration userRegistration) {
+    public EntityResponse createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
         EntityResponse response = new EntityResponse<>();
         try {
             String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
