@@ -18,15 +18,13 @@ public class Cases {
             mappedBy = "cases",
             cascade = {CascadeType.ALL}
     )
-    private List<Event> events;
+    private List<Events> events;
     @OneToMany(
             mappedBy = "cases",
             cascade = {CascadeType.ALL}
     )
     private List<Document> documents;
 
-    public Cases() {
-    }
 
     public String getCaseNumber() {
         return this.caseNumber;
@@ -36,11 +34,11 @@ public class Cases {
         this.caseNumber = caseNumber;
     }
 
-    public List<Event> getEvents() {
+    public List<Events> getEvents() {
         return this.events;
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(List<Events> events) {
         this.events = events;
     }
 

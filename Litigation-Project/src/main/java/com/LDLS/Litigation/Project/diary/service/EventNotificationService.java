@@ -1,6 +1,6 @@
 package com.LDLS.Litigation.Project.diary.service;
 
-import com.LDLS.Litigation.Project.diary.model.Event;
+import com.LDLS.Litigation.Project.diary.model.Events;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -22,11 +22,11 @@ public class EventNotificationService {
     )
     public void checkUpcomingEventsAndNotify() {
         LocalDate now = LocalDate.now();
-        List<Event> ViewEntries = this.eventService.findUpcomingEvents(now);
+        List<Events> ViewEntries = this.eventService.findUpcomingEvents(now);
         Iterator var3 = ViewEntries.iterator();
 
         while(var3.hasNext()) {
-            Event event = (Event)var3.next();
+            Events event = (Events)var3.next();
             String var10000 = event.getShortTitle();
             String message = "Upcoming event: " + var10000 + " on " + event.getDate() + " at " + event.getTime();
             this.simpMessagingTemplate.convertAndSend("/topic/upcomingEvents", message);
