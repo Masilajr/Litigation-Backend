@@ -26,7 +26,10 @@ public class ClientController {
         List<Client> clients = clientService.findAllClients();
         return ResponseEntity.ok(clients);
     }
-
-    // ... other methods for client information retrieval
+    @PostMapping("/")
+    public ResponseEntity<Client> addClient(@RequestBody Client client) {
+        Client savedClient = clientService.saveClient(client);
+        return ResponseEntity.ok(savedClient);
+    }
 }
 
