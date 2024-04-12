@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import javax.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -15,9 +20,11 @@ public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
-    // Additional fields if needed
+    private boolean view;
+    private boolean editAdd;
+    private boolean upload;
+    private boolean generate;
+    private boolean approve;
 }
 

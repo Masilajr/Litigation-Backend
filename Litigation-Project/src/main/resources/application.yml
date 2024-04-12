@@ -7,10 +7,10 @@ spring:
     url: jdbc:mariadb://localhost:3306/mutua
     username: root
     password: Bhartem55
-  #
-  #    url: jdbc:mariadb://52.15.152.26:3306/LITIGATION
-  #    username: emtech
-  #    password: emtech@2022
+
+#      url: jdbc:mariadb://102.210.244.99:3306/LITIGATION
+#      username: emtech
+#      password: emtech@2022
   driverClassName: org.mariadb.jdbc.Driver
   jpa:
     show-sql: false

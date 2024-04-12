@@ -1,12 +1,16 @@
 package com.LDLS.Litigation.Project.UserRegistration;
+
+import com.LDLS.Litigation.Project.UserRegistration.Privilege;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -17,6 +21,7 @@ public class UserRegistration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NonNull
     private String firstName;
     private String middleName;
@@ -32,13 +37,19 @@ public class UserRegistration {
     private String gender;
     private String username;
     private String temporaryPassword;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Set<Privilege> privileges;
+
     private String accessPeriod;
     private String country;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_privileges",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    private Set<Privilege> privileges = new HashSet<>();
+    public void setPrivileges(Set<Privilege> privileges)
+    {
+        this.privileges = new HashSet<>(privileges);
+    }
+
+
 
 }
