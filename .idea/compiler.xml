@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Litigation-Project" />
+        <module name="Loan_Litigation" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Litigation-Project" options="-parameters" />
+      <module name="Loan_Litigation" options="-parameters" />
     </option>
   </component>
 </project>

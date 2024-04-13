@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @Configuration
@@ -112,6 +112,41 @@ public class ClientManagementService {
         }
         return entityResponse;
     }
+
+    public List<ClientManagement> getAllClients() {
+        return clientManagementRepository.findAll();
+    }
+//    public Map<String, Long> getLoanSummary(List<ClientManagement> clients) {
+//        return clients.stream()
+//                .collect(Collectors.groupingBy(ClientManagement::getLoanDescription,
+//                        Collectors.summingLong(ClientManagement::getLoanAmount)));
+//    }
+public Map<String, Map<String, Long>> getLoanSummary(List<ClientManagement> clients) {
+    return clients.stream()
+            .filter(c -> c.getLoanDescription() != null && c.getOutPrincipal() != null) // Ensure loanDescription and outPrincipal are not null
+            .collect(Collectors.groupingBy(ClientManagement::getLoanDescription,
+                    Collectors.collectingAndThen(
+                            Collectors.toList(),
+                            list -> {
+                                long sum = list.stream()
+                                        .mapToLong(c -> {
+                                            try {
+                                                return Long.parseLong(c.getOutPrincipal());
+                                            } catch (NumberFormatException e) {
+                                                // Log the error or handle it as needed
+                                                return 0L; // Return 0 for invalid values
+                                            }
+                                        })
+                                        .sum();
+
+                                Map<String, Long> result = new HashMap<>();
+                                result.put("count", (long) list.size());
+                                result.put("sum", sum);
+                                return result;
+                            })));
+}
+
+
 
     public EntityResponse update(ClientManagement clientManagement) {
         EntityResponse entityResponse = new EntityResponse<>();

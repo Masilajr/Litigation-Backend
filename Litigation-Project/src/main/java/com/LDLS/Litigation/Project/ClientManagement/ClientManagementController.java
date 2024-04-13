@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/clientmanagement")
@@ -21,6 +23,12 @@ public class ClientManagementController {
     public EntityResponse update(@PathVariable Long id, @RequestBody ClientManagement clientManagement) {
         clientManagement.setId(id);
         return clientManagementService.update(clientManagement);
+    }
+
+    @GetMapping("/summary")
+    public Map<String, Map<String, Long>> getLoanSummary() {
+        List<ClientManagement> clients = clientManagementService.getAllClients();
+        return clientManagementService.getLoanSummary(clients);
     }
 
     @GetMapping("/read")
@@ -86,7 +94,6 @@ public class ClientManagementController {
 //            return clientManagementService.update(clientManagement);
 //        }
 //
-//        // Other methods remain unchanged
 //    }
 
 }
