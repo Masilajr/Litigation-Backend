@@ -40,14 +40,24 @@ public class UserRegistration {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private Set<Privilege> privileges;
+    private List<Privilege> privileges;
 
     private String accessPeriod;
     private String country;
 
-    public void setPrivileges(Set<Privilege> privileges)
-    {
-        this.privileges = new HashSet<>(privileges);
+    public List<Privilege> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(List<Privilege> privileges) {
+        this.privileges = privileges;
+    }
+
+    public UserRegistration(Long id, String firstName, String lastName, String privilege) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.privilege = privilege;
     }
 
 

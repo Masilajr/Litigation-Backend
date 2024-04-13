@@ -2,17 +2,17 @@ package com.LDLS.Litigation.Project.UserRegistration.DTO;
 import com.LDLS.Litigation.Project.UserRegistration.Privilege;
 import com.LDLS.Litigation.Project.UserRegistration.UserRegistration;
 import lombok.Data;
-
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class UserRegistrationRequest {
     private UserRegistration userRegistration;
-    private List<Privilege> selectedPrivileges;
-    private List<Privilege> privileges;
+    private List<String> selectedPrivileges;
+    private List<Privilege> privileges; // Define the 'privileges' field here
 
-        public List<Privilege> getPrivileges() {
+    // Getters and setters for userRegistration and selectedPrivileges
+
+    public List<Privilege> getPrivileges() {
         return this.privileges;
     }
 
@@ -20,7 +20,3 @@ public class UserRegistrationRequest {
         this.privileges = privileges;
     }
 }
-
-
-
-

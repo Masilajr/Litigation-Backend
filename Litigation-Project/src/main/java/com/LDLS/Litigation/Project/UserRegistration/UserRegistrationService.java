@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,14 +26,14 @@ public class UserRegistrationService {
         return userRegistrationRepository.findById(id);
     }
 
-//    public EntityResponse createUserRegistration(UserRegistration userRegistration) {
+//    public EntityResponse createUserRegistration(UserRegistrationDTO userRegistration) {
 //        EntityResponse response = new EntityResponse<>();
 //        try {
 //            String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
 //            String randomDigits = String.format("%04d", new Random().nextInt(10000));
 //            String userId = "USER" + "/" + dayMonth + "/" + randomDigits;
 //            userRegistration.setUserId(userId);
-//            Optional<UserRegistration> user = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
+//            Optional<UserRegistrationDTO> user = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
 //            if (user.isPresent()) {
 //                response.setMessage("Provided user National Id already exists!!");
 //                response.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
@@ -44,7 +43,7 @@ public class UserRegistrationService {
 //                userRegistration.setTemporaryPassword(randomPassword);
 //                userRegistration.setUsername(userRegistration.getUsername());
 //                userRegistration.setRole(userRegistration.getRole());
-//                UserRegistration registration = userRegistrationRepository.save(userRegistration);
+//                UserRegistrationDTO registration = userRegistrationRepository.save(userRegistration);
 //                response.setMessage("successfully registered Customer");
 //                response.setEntity(registration);
 //                response.setStatusCode(HttpStatus.CREATED.value());
@@ -61,26 +60,26 @@ public class UserRegistrationService {
     public EntityResponse createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
         EntityResponse response = new EntityResponse<>();
         try {
-            // Generate userId
             String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
             String randomDigits = String.format("%04d", new Random().nextInt(10000));
             String userId = "USER" + "/" + dayMonth + "/" + randomDigits;
             userRegistration.setUserId(userId);
 
-            // Check if user with the same national ID already exists
             Optional<UserRegistration> existingUser = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
             if (existingUser.isPresent()) {
-                response.setMessage("Provided user National ID already exists!!");
+                response.setMessage("Provided user National Id already exists!!");
                 response.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
                 return response;
             }
 
-            // Generate random temporary password
             String randomPassword = passwordEncoder.encode("randomPassword");
             userRegistration.setTemporaryPassword(randomPassword);
 
             // Set user privileges
-            userRegistration.setPrivileges(privileges);
+            // Set user privileges
+            List<Privilege> privilegeList = new ArrayList<>(privileges);
+            userRegistration.setPrivileges(privilegeList);
+
 
             // Save user registration
             UserRegistration registration = userRegistrationRepository.save(userRegistration);
@@ -95,6 +94,7 @@ public class UserRegistrationService {
         }
         return response;
     }
+
 
 
 
