@@ -8,15 +8,6 @@ import java.util.List;
 public class UserRegistrationRequest {
     private UserRegistration userRegistration;
     private List<String> selectedPrivileges;
-    private List<Privilege> privileges; // Define the 'privileges' field here
+    private List<Privilege> privileges;
 
-    // Getters and setters for userRegistration and selectedPrivileges
-
-    public List<Privilege> getPrivileges() {
-        return this.privileges;
-    }
-
-    public void setPrivileges(List<Privilege> privileges) {
-        this.privileges = privileges;
-    }
 }

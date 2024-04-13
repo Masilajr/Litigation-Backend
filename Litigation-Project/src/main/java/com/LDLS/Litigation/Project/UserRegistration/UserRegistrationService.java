@@ -26,37 +26,6 @@ public class UserRegistrationService {
         return userRegistrationRepository.findById(id);
     }
 
-//    public EntityResponse createUserRegistration(UserRegistrationDTO userRegistration) {
-//        EntityResponse response = new EntityResponse<>();
-//        try {
-//            String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
-//            String randomDigits = String.format("%04d", new Random().nextInt(10000));
-//            String userId = "USER" + "/" + dayMonth + "/" + randomDigits;
-//            userRegistration.setUserId(userId);
-//            Optional<UserRegistrationDTO> user = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
-//            if (user.isPresent()) {
-//                response.setMessage("Provided user National Id already exists!!");
-//                response.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
-//
-//            } else {
-//                String randomPassword = passwordEncoder.encode("randomPassword");
-//                userRegistration.setTemporaryPassword(randomPassword);
-//                userRegistration.setUsername(userRegistration.getUsername());
-//                userRegistration.setRole(userRegistration.getRole());
-//                UserRegistrationDTO registration = userRegistrationRepository.save(userRegistration);
-//                response.setMessage("successfully registered Customer");
-//                response.setEntity(registration);
-//                response.setStatusCode(HttpStatus.CREATED.value());
-//            }
-//
-//        } catch (Exception e) {
-//            log.info("Unable to register", e.getMessage());
-//            response.setMessage("failed to register user");
-//            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-//        return response;
-//    }
-
     public EntityResponse createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
         EntityResponse response = new EntityResponse<>();
         try {
@@ -76,10 +45,8 @@ public class UserRegistrationService {
             userRegistration.setTemporaryPassword(randomPassword);
 
             // Set user privileges
-            // Set user privileges
             List<Privilege> privilegeList = new ArrayList<>(privileges);
             userRegistration.setPrivileges(privilegeList);
-
 
             // Save user registration
             UserRegistration registration = userRegistrationRepository.save(userRegistration);

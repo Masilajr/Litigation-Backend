@@ -59,7 +59,4 @@ public class UserRegistration {
         this.lastName = lastName;
         this.privilege = privilege;
     }
-
-
-
 }

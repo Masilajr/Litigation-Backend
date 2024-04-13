@@ -5,21 +5,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-
-
+@Entity
 @Data
-@Table(name = "privilege")
+@Table(name = "privileges")
 public class Privilege {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private String name;
     private boolean view;
     private boolean editAdd;
     private boolean upload;
     private boolean generate;
     private boolean approve;
-}
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserRegistration userRegistration;
+}
