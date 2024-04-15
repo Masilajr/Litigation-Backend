@@ -1,16 +1,11 @@
 package com.LDLS.Litigation.Project.UserRegistration;
-
-import com.LDLS.Litigation.Project.UserRegistration.Privilege;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -44,6 +39,7 @@ public class UserRegistration {
 
     private String accessPeriod;
     private String country;
+
 
     public List<Privilege> getPrivileges() {
         return privileges;

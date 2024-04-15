@@ -1,6 +1,8 @@
 package com.LDLS.Litigation.Project.UserRegistration;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
+import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,21 +20,45 @@ public class UserRegistrationService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public List<UserRegistration> getAllCustomerRegistration() {
-        return userRegistrationRepository.findAll();
+    public List<UserRegistrationDTO> getAllCustomerRegistration() {
+        List<UserRegistration> userRegistrations = userRegistrationRepository.findAll();
+        List<UserRegistrationDTO> userRegistrationDTOs = new ArrayList<>();
+        for (UserRegistration userRegistration : userRegistrations) {
+            UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
+            userRegistrationDTO.setId(userRegistration.getId());
+            userRegistrationDTO.setFirstName(userRegistration.getFirstName());
+            userRegistrationDTO.setMiddleName(userRegistration.getMiddleName());
+            userRegistrationDTO.setLastName(userRegistration.getLastName());
+            userRegistrationDTO.setUserId(userRegistration.getUserId());
+            userRegistrationDTO.setEmail(userRegistration.getEmail());
+            userRegistrationDTO.setPrivilege(userRegistration.getPrivilege());
+            userRegistrationDTO.setPhoneNumber(userRegistration.getPhoneNumber());
+            userRegistrationDTO.setBranch(userRegistration.getBranch());
+            userRegistrationDTO.setNationalIdNumber(userRegistration.getNationalIdNumber());
+            userRegistrationDTO.setRole(userRegistration.getRole());
+            userRegistrationDTO.setGender(userRegistration.getGender());
+            userRegistrationDTO.setUsername(userRegistration.getUsername());
+            userRegistrationDTO.setTemporaryPassword(userRegistration.getTemporaryPassword());
+            userRegistrationDTO.setAccessPeriod(userRegistration.getAccessPeriod());
+            userRegistrationDTO.setCountry(userRegistration.getCountry());
+
+            userRegistrationDTOs.add(userRegistrationDTO);
+        }
+        return userRegistrationDTOs;
     }
 
     public Optional<UserRegistration> getUserRegistrationById(Long id) {
         return userRegistrationRepository.findById(id);
     }
 
-    public EntityResponse createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
-        EntityResponse response = new EntityResponse<>();
+    public EntityResponse<UserRegistrationDTO> createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
+        EntityResponse<UserRegistrationDTO> response = new EntityResponse<>();
         try {
             String dayMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMM"));
             String randomDigits = String.format("%04d", new Random().nextInt(10000));
             String userId = "USER" + "/" + dayMonth + "/" + randomDigits;
             userRegistration.setUserId(userId);
+            UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
 
             Optional<UserRegistration> existingUser = userRegistrationRepository.findByNationalIdNumber(userRegistration.getNationalIdNumber());
             if (existingUser.isPresent()) {
@@ -52,7 +78,7 @@ public class UserRegistrationService {
             UserRegistration registration = userRegistrationRepository.save(userRegistration);
 
             response.setMessage("Successfully registered Customer");
-            response.setEntity(registration);
+            response.setEntity(userRegistrationDTO);
             response.setStatusCode(HttpStatus.CREATED.value());
         } catch (Exception e) {
             log.error("Unable to register user", e);
@@ -63,29 +89,18 @@ public class UserRegistrationService {
     }
 
 
-
-
-
     public UserRegistration updateUserRegistration(Long id, UserRegistration newUserRegistration) {
-        return userRegistrationRepository.findById(id)
-                .map(userRegistration -> {
-                    userRegistration.setFirstName(newUserRegistration.getFirstName());
-                    userRegistration.setMiddleName(newUserRegistration.getMiddleName());
-                    userRegistration.setLastName(newUserRegistration.getLastName());
-                    userRegistration.setUsername(newUserRegistration.getUsername());
-                    userRegistration.setTemporaryPassword(newUserRegistration.getTemporaryPassword());
-                    userRegistration.setEmail(newUserRegistration.getEmail());
-                    userRegistration.setNationalIdNumber(newUserRegistration.getNationalIdNumber());
-                    userRegistration.setRole(newUserRegistration.getRole());
-                    userRegistration.setPhoneNumber(newUserRegistration.getPhoneNumber());
-                    userRegistration.setGender(newUserRegistration.getGender());
-                    userRegistration.setAccessPeriod(newUserRegistration.getAccessPeriod());
-                    userRegistration.setBranch(newUserRegistration.getBranch());
-                    userRegistration.setCountry(newUserRegistration.getCountry());
-
-                    return userRegistrationRepository.save(userRegistration);
-                })
-                .orElseThrow(() -> new UserNotFoundException("Customer registration not found with id: " + id));
+        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+        if (optionalUserRegistration.isPresent()) {
+            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+            // Copy non-null properties from newUserRegistration to existingUserRegistration
+            BeanUtils.copyProperties(newUserRegistration, existingUserRegistration, "id", "privileges");
+            // Update privileges separately
+            existingUserRegistration.setPrivileges(newUserRegistration.getPrivileges());
+            return userRegistrationRepository.save(existingUserRegistration);
+        } else {
+            throw new UserNotFoundException("Customer registration not found with id: " + id);
+        }
     }
     public EntityResponse deleteUserRegistrationById(Long id) {
         EntityResponse res = new EntityResponse<>();
