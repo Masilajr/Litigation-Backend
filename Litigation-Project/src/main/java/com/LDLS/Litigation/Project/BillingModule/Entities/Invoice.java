@@ -11,12 +11,9 @@ public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String clientName;
+    private Long Id;
     private Double amount;
     private String status; // e.g., "PENDING", "PAID"
-
-//    @OneToMany(mappedBy = "invoice")
-//    private List<InvoiceItem> items;
 
     private PaymentMethod paymentMethod;
 

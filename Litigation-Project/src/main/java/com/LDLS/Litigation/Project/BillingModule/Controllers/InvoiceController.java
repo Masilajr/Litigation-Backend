@@ -19,7 +19,7 @@ public class InvoiceController {
         return invoiceService.generateInvoice(invoice);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Invoice> getAllInvoices() {
 
         return invoiceService.getAllInvoices();
