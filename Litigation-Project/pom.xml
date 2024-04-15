@@ -197,11 +197,23 @@
 
 
 
+
 	</dependencies>
 
 	<build>
 
 		<plugins>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<configuration>
+							<mainClass>com.LDLS.Litigation.Project.LitigationProjectApplication</mainClass>
+						</configuration>
+					</plugin>
+
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

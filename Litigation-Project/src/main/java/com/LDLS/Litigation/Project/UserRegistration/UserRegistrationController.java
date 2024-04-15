@@ -1,5 +1,6 @@
 package com.LDLS.Litigation.Project.UserRegistration;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
+import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +30,13 @@ public class UserRegistrationController {
 //    }
 
     @PostMapping("/create")
-    public ResponseEntity<EntityResponse> createUserRegistration(@RequestBody UserRegistration userRegistration) {
+    public ResponseEntity<EntityResponse<UserRegistrationDTO>> createUserRegistration(@RequestBody UserRegistration userRegistration) {
         try {
             // Extract selected privileges from the request
             Set<Privilege> privileges = mapSelectedPrivileges(userRegistration.getPrivileges());
 
             // Call service method with user registration and privileges
-            EntityResponse response = userRegistrationService.createUserRegistration(userRegistration, privileges);
+            EntityResponse<UserRegistrationDTO> response = userRegistrationService.createUserRegistration(userRegistration, privileges);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -70,9 +71,22 @@ public class UserRegistrationController {
 
 
     @GetMapping("/fetch")
-    public List<UserRegistration> getAllUserRegistration() {
-        return userRegistrationService.getAllCustomerRegistration();
+    public ResponseEntity<EntityResponse<List<UserRegistrationDTO>>> getAllUserRegistration() {
+        try {
+
+            List<UserRegistrationDTO> userRegistrations = userRegistrationService.getAllCustomerRegistration();
+
+            EntityResponse<List<UserRegistrationDTO>> response = new EntityResponse<>();
+            response.setMessage("Successfully fetched all user registrations");
+            response.setEntity(userRegistrations);
+            response.setStatusCode(HttpStatus.OK.value());
+
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<UserRegistration> updateUserRegistration(
