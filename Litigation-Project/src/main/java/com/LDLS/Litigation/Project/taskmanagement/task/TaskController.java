@@ -46,24 +46,45 @@ public class TaskController {
     }
 
     @GetMapping({"/all"})
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<EntityResponse> getAllTasks() {
         List<Task> tasks = this.taskService.getAllTasks();
-        return new ResponseEntity(tasks, HttpStatus.OK);
+        EntityResponse response = new EntityResponse();
+        response.setMessage("Tasks retrieved successfully");
+        response.setEntity(tasks);
+        response.setStatusCode(HttpStatus.OK.value());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping({"/{id}"})
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<EntityResponse> getTaskById(@PathVariable Long id) {
         Task task = this.taskService.getTaskById(id);
-        return task == null ? new ResponseEntity(HttpStatus.NOT_FOUND) : new ResponseEntity(task, HttpStatus.OK);
+        EntityResponse response = new EntityResponse();
+        if (task == null) {
+            response.setMessage("Task not found");
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else {
+            response.setMessage("Task retrieved successfully");
+            response.setEntity(task);
+            response.setStatusCode(HttpStatus.OK.value());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
-
     @PutMapping({"/update"})
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+    public ResponseEntity<EntityResponse> updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
         Task task = this.taskService.editTask(id, updatedTask);
-        return task == null ? new ResponseEntity(HttpStatus.NOT_FOUND) : new ResponseEntity(task, HttpStatus.OK);
+        EntityResponse response = new EntityResponse();
+        if (task == null) {
+            response.setMessage("Task not found");
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else {
+            response.setMessage("Task updated successfully");
+            response.setEntity(task);
+            response.setStatusCode(HttpStatus.OK.value());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
-
-
     @DeleteMapping({"/delete/{id}"})
     public ResponseEntity<EntityResponse> deleteTaskById(@PathVariable Long id) {
         EntityResponse response = new EntityResponse();
@@ -82,8 +103,12 @@ public class TaskController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Task>> searchTasks(@RequestParam String title) {
+    public ResponseEntity<EntityResponse> searchTasks(@RequestParam String title) {
         List<Task> tasks = taskService.searchTasks(title);
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
+        EntityResponse response = new EntityResponse();
+        response.setMessage(tasks.isEmpty() ? "No tasks found" : "Tasks retrieved successfully");
+        response.setEntity(tasks);
+        response.setStatusCode(HttpStatus.OK.value());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

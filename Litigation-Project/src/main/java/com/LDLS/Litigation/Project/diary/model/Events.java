@@ -36,7 +36,6 @@ public class Events {
     public Events() {
     }
 
-    // Your existing getters and setters
 
     public com.google.api.services.calendar.model.Event toGoogleCalendarEvent() {
         com.google.api.services.calendar.model.Event calendarEvent = new com.google.api.services.calendar.model.Event();
