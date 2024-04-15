@@ -4,6 +4,7 @@ package com.LDLS.Litigation.Project.diary.Controller;
 import com.LDLS.Litigation.Project.Authentication.Utils.Shared.EntityResponse;
 import com.LDLS.Litigation.Project.diary.model.Events;
 import com.LDLS.Litigation.Project.diary.service.EventService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Slf4j
 @RestController("eventControllerDiary")
 @RequestMapping({"/api/events/"})
 public class EventControllerDiary {
@@ -21,15 +22,32 @@ public class EventControllerDiary {
     public EventControllerDiary() {
     }
 
-    @PostMapping({"/add"})
-    public ResponseEntity<EntityResponse> createEvent(@RequestBody Events event) {
+//    @PostMapping({"/add"})
+//    public ResponseEntity<EntityResponse> createEvent(@RequestBody Events event) {
+//        Events createdEvent = this.eventService.createEvent(event);
+//        EntityResponse response = new EntityResponse();
+//        response.setMessage("Event created successfully");
+//        response.setEntity(createdEvent);
+//        response.setStatusCode(HttpStatus.CREATED.value());
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    //}
+@PostMapping("/add")
+public ResponseEntity<EntityResponse> createEvent(@RequestBody Events event) {
+    try {
         Events createdEvent = this.eventService.createEvent(event);
+
         EntityResponse response = new EntityResponse();
         response.setMessage("Event created successfully");
         response.setEntity(createdEvent);
         response.setStatusCode(HttpStatus.CREATED.value());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
+
+        log.info("Event created successfully: {}", createdEvent);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (Exception e) {
+        log.error("Error creating event: {}", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }}
 
     @GetMapping({"/read"})
     public ResponseEntity<EntityResponse> getAllEvents() {
@@ -80,17 +98,22 @@ public class EventControllerDiary {
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping({"/upcoming"})
-    public ResponseEntity<EntityResponse> findUpcomingEntries() {
-        LocalDate today = LocalDate.now();
-        List<Events> upcomingEvents = this.eventService.findUpcomingEvents(today);
-        EntityResponse response = new EntityResponse();
-        response.setMessage("Upcoming events fetched successfully");
-        response.setEntity(upcomingEvents);
-        response.setStatusCode(HttpStatus.OK.value());
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
+//    @GetMapping({"/upcoming"})
+//    public ResponseEntity<EntityResponse> findUpcomingEntries() {
+//        LocalDate today = LocalDate.now();
+//        List<Events> upcomingEvents = this.eventService.findUpcomingEvents(today);
+//        EntityResponse response = new EntityResponse();
+//        response.setMessage("Upcoming events fetched successfully");
+//        response.setEntity(upcomingEvents);
+//        response.setStatusCode(HttpStatus.OK.value());
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+@GetMapping({"/upcoming"})
+public ResponseEntity<List<Events>> findUpcomingEntries() {
+    LocalDate today = LocalDate.now();
+    List<Events> upcomingEvents = this.eventService.findUpcomingEvents(today);
+    return new ResponseEntity<>(upcomingEvents, HttpStatus.OK);
+}
     @GetMapping("/search")
     public ResponseEntity<EntityResponse> searchEventsByTitle(@RequestParam String title) {
         List<Events> events = eventService.searchEventsByTitle(title);

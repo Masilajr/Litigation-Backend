@@ -32,7 +32,6 @@ public class CaseService {
     public Cases updateCase(String caseNumber, Cases caseDetails) {
         Cases cases = this.getCaseById(caseNumber);
         cases.setDocuments(caseDetails.getDocuments());
-        cases.setEvents(caseDetails.getEvents());
         return (Cases)this.caseRepository.save(cases);
     }
 

@@ -28,7 +28,7 @@ public class EventNotificationService {
         while(var3.hasNext()) {
             Events event = (Events)var3.next();
             String var10000 = event.getShortTitle();
-            String message = "Upcoming event: " + var10000 + " on " + event.getDate() + " at " + event.getTime();
+            String message = "Upcoming event: " + var10000 + " on " + event.getEventDate() + " at " + event.getTime();
             this.simpMessagingTemplate.convertAndSend("/topic/upcomingEvents", message);
         }
 

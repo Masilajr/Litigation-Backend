@@ -38,7 +38,7 @@ public class EventService {
     }
     public Events updateEvent(Long id, Events eventDetails) {
         Events event = getEventById(id);
-        event.setDate(eventDetails.getDate());
+        event.setEventDate(eventDetails.getEventDate());
         event.setTime(eventDetails.getTime());
         event.setVenue(eventDetails.getVenue());
         event.setShortTitle(eventDetails.getShortTitle());
@@ -50,41 +50,42 @@ public class EventService {
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
     }
-
-    public List<Events> findAllByEventDateGreaterThanEqual(LocalDate date) {
-        // Assuming you have a method to fetch events from the Google Calendar API
-        List<com.google.api.services.calendar.model.Event> googleEvents = fetchEventsFromGoogleCalendar(date);
-
-        List<Events> events = googleEvents.stream()
-                .map(googleEvent -> {
-                    Events event = new Events();
-                    // Convert Google Calendar API event properties to your Events model
-                    event.setDate(convertGoogleDateTimeToLocalDate(googleEvent.getStart().getDateTime()));
-                    event.setTime(convertGoogleDateTimeToLocalTime(googleEvent.getStart().getDateTime()));
-                    event.setVenue(googleEvent.getLocation());
-                    event.setShortTitle(googleEvent.getSummary());
-                    event.setDescription(googleEvent.getDescription());
-                    // Add any other necessary conversions here
-                    return event;
-                })
-                .collect(Collectors.toList());
-        return events;
-    }
-    private List<com.google.api.services.calendar.model.Event> fetchEventsFromGoogleCalendar(LocalDate date) {
-        return new ArrayList<>();
-    }
-    private LocalDate convertGoogleDateTimeToLocalDate(DateTime googleDateTime) {
-        Instant instant = Instant.ofEpochMilli(googleDateTime.getValue());
-        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-    private LocalTime convertGoogleDateTimeToLocalTime(DateTime googleDateTime) {
-        Instant instant = Instant.ofEpochMilli(googleDateTime.getValue());
-        return instant.atZone(ZoneId.systemDefault()).toLocalTime();
-    }
+//
+//    public List<Events> findAllByEventDateGreaterThanEqual(LocalDate date) {
+//        // Assuming you have a method to fetch events from the Google Calendar API
+//        List<com.google.api.services.calendar.model.Event> googleEvents = fetchEventsFromGoogleCalendar(date);
+//
+//        List<Events> events = googleEvents.stream()
+//                .map(googleEvent -> {
+//                    Events event = new Events();
+//                    // Convert Google Calendar API event properties to your Events model
+//                    event.setDate(convertGoogleDateTimeToLocalDate(googleEvent.getStart().getDateTime()));
+//                    event.setTime(convertGoogleDateTimeToLocalTime(googleEvent.getStart().getDateTime()));
+//                    event.setVenue(googleEvent.getLocation());
+//                    event.setShortTitle(googleEvent.getSummary());
+//                    event.setDescription(googleEvent.getDescription());
+//                    // Add any other necessary conversions here
+//                    return event;
+//                })
+//                .collect(Collectors.toList());
+//        return events;
+//    }
+//    private List<com.google.api.services.calendar.model.Event> fetchEventsFromGoogleCalendar(LocalDate date) {
+//        return new ArrayList<>();
+//    }
+//    private LocalDate convertGoogleDateTimeToLocalDate(DateTime googleDateTime) {
+//        Instant instant = Instant.ofEpochMilli(googleDateTime.getValue());
+//        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+//    }
+//    private LocalTime convertGoogleDateTimeToLocalTime(DateTime googleDateTime) {
+//        Instant instant = Instant.ofEpochMilli(googleDateTime.getValue());
+//        return instant.atZone(ZoneId.systemDefault()).toLocalTime();
+//    }
     public List<Events> searchEventsByTitle(String title) {
         return eventRepository.findAllByShortTitle(title);
     }
     public List<Events> findUpcomingEvents(LocalDate today) {
         return eventRepository.findAllByEventDateGreaterThanEqual(today);
     }
+
 }
