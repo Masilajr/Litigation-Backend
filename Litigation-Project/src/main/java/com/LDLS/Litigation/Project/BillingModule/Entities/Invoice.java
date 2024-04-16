@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
 
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.description;
+
 @Entity
 @Data
 public class Invoice {
@@ -17,7 +19,11 @@ public class Invoice {
 
     private PaymentMethod paymentMethod;
 
-    // Constructors, getters, and setters
+    public Object getDescription() { return description;
+    }
+
+    public void setDescription(Object description) {
+    }
 
     public enum PaymentMethod {
         CASH, CHEQUE, BANK_TRANSFER

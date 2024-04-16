@@ -26,5 +26,9 @@ public class InvoiceService {
     public List<Invoice> getAllInvoices() { return invoiceRepository.findAll();
     }
 
-    // Add more methods as needed
+    public Invoice updateInvoice(Invoice invoice) { return invoice;
+    }
+
+    public void deleteInvoice(Long id) {
+    }
 }
