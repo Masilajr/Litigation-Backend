@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface EventRepository extends JpaRepository<Events, Long> {
     List<Events> findAllByShortTitle(String title);
-    @Query("SELECT e FROM Events e WHERE e.eventDate >= :today")
     List<Events> findAllByEventDateGreaterThanEqual(LocalDate today);
+
 
 }
