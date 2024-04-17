@@ -1,18 +1,22 @@
 package com.LDLS.Litigation.Project.diary.Controller;
 
 import com.LDLS.Litigation.Project.Authentication.Utils.Shared.EntityResponse;
+import com.LDLS.Litigation.Project.diary.model.EventStatus;
 import com.LDLS.Litigation.Project.diary.model.Events;
 import com.LDLS.Litigation.Project.diary.repository.EventRepository;
 import com.LDLS.Litigation.Project.diary.service.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController("eventControllerDiary")
@@ -142,4 +146,27 @@ public class EventControllerDiary {
         response.setStatusCode(HttpStatus.OK.value());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @GetMapping("/counts")
+    public ResponseEntity<Map<String, Long>> getEventCounts() {
+        Map<String, Long> counts = new HashMap<>();
+        counts.put("upcoming", eventService.countEventsByStatus(EventStatus.UPCOMING));
+        counts.put("cancelled", eventService.countEventsByStatus(EventStatus.CANCELLED));
+        counts.put("completed", eventService.countEventsByStatus(EventStatus.COMPLETED));
+        return ResponseEntity.ok(counts);
+    }
+    @GetMapping("/pending")
+    public List<Events> getPendingEvents(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate today) {
+        return eventService.getPendingEvents(today);
+    }
+
+    @GetMapping("/active")
+    public List<Events> getActiveEvents(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate today) {
+        return eventService.getActiveEvents(today);
+    }
+
+    @GetMapping("/completed")
+    public List<Events> getCompletedEvents(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate today) {
+        return eventService.getCompletedEvents(today);
+    }
 }
+
