@@ -144,8 +144,11 @@ public class AuthController {
                         " Your account has been successfully created using username " + user.getUsername()
                         + " and password " + signUpRequest.getPassword();
                 String subject = "Account creation";
+                String temporaryPassword = generateTemporaryPassword();
+                String userId = user.getUserId();
 
-                mailService.sendEmail(users.getEmail(), null, mailMessage, subject, false, null, null);
+
+                mailService.sendEmail(users.getEmail(), null, mailMessage, subject, false, null, null, userId, temporaryPassword);
                 response.setMessage("User " + user.getUsername() + " registered successfully!");
                 response.setStatusCode(HttpStatus.CREATED.value());
                 response.setEntity(users);
@@ -159,6 +162,13 @@ public class AuthController {
             return null;
         }
     }
+
+    private String generateTemporaryPassword() {
+        String temporaryPassword = UUID.randomUUID().toString().replace("-", "");
+        // Optionally, you can add additional logic here to ensure the password meets your security requirements
+        return temporaryPassword;
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) throws MessagingException {
         EntityResponse response = new EntityResponse<>();
@@ -255,8 +265,9 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-//        String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
-//        mailService.sendEmail(userDetails.getEmail(), otp, "OTP Code");
+        String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
+        mailService.sendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null, null, null);
+
 
         JwtResponse response = new JwtResponse();
         response.setToken(jwt);
@@ -434,7 +445,7 @@ public class AuthController {
                                 "    <li>Password: <strong>"+ generatedPassword +"</strong></li>\n" +
                                 "  </ul>\n" +
                                 "  <p>Please login to change your password.</p>";
-                mailsService.sendEmail(existingUser.getEmail(),null, mailMessage, subject, false, null, null);
+                //mailsService.sendEmail(existingUser.getEmail(),null, mailMessage, subject, false, null, null);
                 EntityResponse response = new EntityResponse();
                 response.setMessage("Password Reset Successfully! Password has been sent to the requested email");
                 response.setStatusCode(HttpStatus.OK.value());

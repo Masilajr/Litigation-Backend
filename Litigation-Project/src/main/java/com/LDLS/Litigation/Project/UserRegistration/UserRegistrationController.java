@@ -63,19 +63,25 @@ public class UserRegistrationController {
 
 
 
+//    @GetMapping("/get/{id}")
+//    public ResponseEntity<UserRegistration> getuserRegistrationById(@PathVariable Long id) {
+//        Optional<UserRegistration> userRegistrationOptional = userRegistrationService.getUserRegistrationByIdWithPrivileges(id);
+//
+//        if (userRegistrationOptional.isPresent()) {
+//            UserRegistration userRegistration = userRegistrationOptional.get();
+//            return ResponseEntity.ok(userRegistration);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+
     @GetMapping("/get/{id}")
-    public ResponseEntity<UserRegistration> getuserRegistrationById(@PathVariable Long id) {
-        Optional<UserRegistration> userRegistrationOptional = userRegistrationService.getUserRegistrationByIdWithPrivileges(id);
-
-        if (userRegistrationOptional.isPresent()) {
-            UserRegistration userRegistration = userRegistrationOptional.get();
-            return ResponseEntity.ok(userRegistration);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<UserRegistrationDTO> getUserRegistrationById(@PathVariable Long id) {
+        return userRegistrationService.getUserRegistrationDTOById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-
-
 
 
     @GetMapping("/fetch")

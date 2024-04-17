@@ -15,8 +15,6 @@ public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonProperty("name")
     private String name;
     private boolean view;
     private boolean editAdd;

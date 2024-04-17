@@ -61,6 +61,7 @@ public class Users {
     private Character firstLogin = 'Y';
     @Column(name = "locked", length = 15)
     private boolean isAcctLocked;
+    private String userId;
     private boolean systemGenPassword = true;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -77,4 +78,8 @@ public class Users {
     private Character approvedFlag;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date approvedTime;
+
+    public String getUserId() {
+        return userId;
+    }
 }
