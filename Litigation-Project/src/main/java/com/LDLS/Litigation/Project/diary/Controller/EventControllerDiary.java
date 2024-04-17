@@ -168,5 +168,9 @@ public class EventControllerDiary {
     public List<Events> getCompletedEvents(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate today) {
         return eventService.getCompletedEvents(today);
     }
+//    @GetMapping("/completed")
+//    public List<Events> getCompletedEventsInChronologicalOrder() {
+//        return eventService.getCompletedEventsInChronologicalOrder();
+//    }
 }
 

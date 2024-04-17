@@ -29,6 +29,7 @@ public class Events {
     private String description;
     private LocalDate eventDate;
     private boolean cancelled;
+    private LocalDateTime completionTime;
 
 //    public Events() {
 //    }

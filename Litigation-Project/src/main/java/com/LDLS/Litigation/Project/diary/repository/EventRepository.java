@@ -16,5 +16,6 @@ public interface EventRepository extends JpaRepository<Events, Long> {
     long countByEventDateLessThanEqualAndCancelledFalse(LocalDate date);
     List<Events> findAllByEventDateGreaterThanEqualAndCancelledFalse(LocalDate date);
     List<Events> findAllByEventDateEqualsAndCancelledFalse(LocalDate date);
-    List<Events> findAllByEventDateLessThanAndCancelledFalse(LocalDate date);
+    List<Events> findAllByCompletionTimeIsNotNullAndCompletionTimeBefore(LocalDate date);
+//    List<Events> findAllByOrderByEventDateAsc();
 }

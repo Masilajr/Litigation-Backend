@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class EventService {
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
+
 
     public Events createEvent(Events event) {
         return eventRepository.save(event);
@@ -89,6 +91,12 @@ public class EventService {
     }
 
     public List<Events> getCompletedEvents(LocalDate today) {
-        return eventRepository.findAllByEventDateLessThanAndCancelledFalse(today.minusDays(1));
+        LocalDate yesterday = today.minusDays(1);
+        return eventRepository.findAllByCompletionTimeIsNotNullAndCompletionTimeBefore(yesterday);
     }
+
+//    public List<Events> getCompletedEventsInChronologicalOrder() {
+//        return eventRepository.findAllByOrderByEventDateAsc();
+//    }
+
 }
