@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityGraph;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -45,10 +46,6 @@ public class UserRegistrationService {
             userRegistrationDTOs.add(userRegistrationDTO);
         }
         return userRegistrationDTOs;
-    }
-
-    public Optional<UserRegistration> getUserRegistrationById(Long id) {
-        return userRegistrationRepository.findById(id);
     }
 
     public EntityResponse<UserRegistrationDTO> createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
@@ -121,5 +118,13 @@ public class UserRegistrationService {
         }
         return res;
     }
+
+    public Optional<UserRegistration> getUserRegistrationByIdWithPrivileges(Long id) {
+        return userRegistrationRepository.findById(id);
+    }
+
+
+
+
 
 }
