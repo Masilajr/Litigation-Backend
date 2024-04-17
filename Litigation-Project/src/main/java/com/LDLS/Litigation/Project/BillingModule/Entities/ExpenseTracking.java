@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,15 +19,16 @@ public class ExpenseTracking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    private Case theCase; // Foreign key referencing Case entity
+    @ManyToOne
+    @JoinColumn(name = "billing_report_id")
+    private BillingReport billingReport;
 
-  @NotNull
-    private String type; // Expense category (e.g., Court Fees, Travel)
-    @NotNull
-    private String description; // Details of the expense
-    @NotNull
+    private String type;
+    private String description;
     private Double amount;
+    private LocalDate expenseDate;
+    private String approver;
+    private LocalDate approvalDate;
+    private String approvalStatus;
 
-    // Getters and Setters omitted for brevity
 }

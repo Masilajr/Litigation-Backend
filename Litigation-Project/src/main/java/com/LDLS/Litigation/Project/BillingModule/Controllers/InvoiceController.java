@@ -1,7 +1,6 @@
 package com.LDLS.Litigation.Project.BillingModule.Controllers;
 
 import com.LDLS.Litigation.Project.BillingModule.Entities.Invoice;
-import com.LDLS.Litigation.Project.BillingModule.Repositories.ExpenseTrackingRepository;
 import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceRepository;
 import com.LDLS.Litigation.Project.BillingModule.Services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +30,22 @@ public class InvoiceController {
         return invoiceService.getAllInvoices();
     }
     @PutMapping("/invoices/{id}")
-    public Invoice updateInvoice(Invoice invoice) {
-        Invoice existingInvoice = invoiceRepository.findById(invoice.getId()).orElse(null);
-        if (existingInvoice == null) {
-            return null;
-        }
-        existingInvoice.setStatus((String) invoice.getStatus());
-        existingInvoice.setAmount(invoice.getAmount());
-        existingInvoice.setPaymentMethod(invoice.getPaymentMethod());
-        Invoice savedInvoice = invoiceRepository.save(existingInvoice);
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
+        Invoice existingInvoice = invoiceRepository.findById(id).orElseThrow(() -> new CustomExeption.ResourceNotFoundException("Invoice not found with id: " + id));
 
-        return savedInvoice;
+        existingInvoice.setInvoiceNumber(invoiceDetails.getInvoiceNumber());
+        existingInvoice.setInvoiceDate(invoiceDetails.getInvoiceDate());
+        existingInvoice.setBillingPeriodStartDate(invoiceDetails.getBillingPeriodStartDate());
+        existingInvoice.setBillingPeriodEndDate(invoiceDetails.getBillingPeriodEndDate());
+        existingInvoice.setLatePaymentFees(invoiceDetails.getLatePaymentFees());
+        existingInvoice.setReturnPolicy(invoiceDetails.getReturnPolicy());
+        existingInvoice.setAmount(invoiceDetails.getAmount());
+        existingInvoice.setStatus(invoiceDetails.getStatus());
+
+        Invoice updatedInvoice = invoiceRepository.save(existingInvoice);
+        return ResponseEntity.ok(updatedInvoice);
     }
+
     @DeleteMapping("/invoices/{id}")
     public ResponseEntity<?> deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);

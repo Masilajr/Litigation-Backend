@@ -1,6 +1,6 @@
 # MySQL Configurations
 server:
-  port: 6900
+  port: 7200
 
 spring:
   datasource:
