@@ -7,6 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -44,18 +46,38 @@ MailService extends Thread {
     JavaMailSender javaMailSender;
     ClassPathResource logo = new ClassPathResource("Em-Tech-logo.png");
     ClassPathResource banner = new ClassPathResource("Em-Tech-banner.png");
-    public void sendEmail(String to,String cc, String message, String subject, boolean hasAttachment, String attachmentName, DataSource dataSource) throws MessagingException {
+    public void sendEmail(String to, String cc, String message, String subject, boolean hasAttachment, String attachmentName, DataSource dataSource, String userId, String temporaryPassword) throws MessagingException {
+        // Validate the 'to' parameter
+        if (to == null || to.isEmpty()) {
+            log.error("Email address is null or empty.");
+            return; // Return early if 'to' is null or empty
+        }
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(to);
+        if (!matcher.matches()) {
+            log.error("Email address format is invalid: " + to);
+            return; // Return early if 'to' does not match the email format
+        }
+
         if (enableEmail.equalsIgnoreCase("false")) {
             log.info("--------------------- Email sending is disabled! Check application.yml");
         } else {
             log.info("--------------------- Email is enabled!");
             executorService.execute(() -> {
-                try{
+                try {
                     MimeMessage mimeMessage = javaMailSender.createMimeMessage();
                     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-                    helper.setTo(to);
+
+                    // Explicit check for an empty string right before setting the 'to' parameter
+                    if (to.isEmpty()) {
+                        log.error("Email address is an empty string.");
+                        return; // Return early if 'to' is an empty string
+                    }
+
+                    helper.setTo(to); // Now, 'to' is guaranteed to be a valid email address
                     helper.setFrom(fromEmail);
-                    if (cc!=null){
+                    if (cc != null) {
                         helper.setCc(cc);
                     }
                     helper.setSubject(subject);
@@ -165,10 +187,9 @@ MailService extends Thread {
                                     "</html>", true);
                     helper.addInline("companyLogo",logo);
                     helper.addInline("rightSideImage",banner);
-                    if (hasAttachment){
-                        helper.addAttachment(attachmentName,dataSource);
+                    if (hasAttachment && dataSource != null) {
+                        helper.addAttachment(attachmentName, dataSource);
                     }
-                    log.info("--------------------- Sending email...");
                     javaMailSender.send(mimeMessage);
                     log.info("--------------------- Mail sent successfully to: " + to);
                 }catch (Exception e){

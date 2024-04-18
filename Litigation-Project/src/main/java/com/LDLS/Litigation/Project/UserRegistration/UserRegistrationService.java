@@ -1,4 +1,5 @@
 package com.LDLS.Litigation.Project.UserRegistration;
+import com.LDLS.Litigation.Project.Authentication.MailService.MailService;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.persistence.EntityGraph;
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -19,6 +23,8 @@ public class UserRegistrationService {
     UserRegistrationRepository userRegistrationRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    MailService mailService;
 
     public List<UserRegistrationDTO> getAllCustomerRegistration() {
         List<UserRegistration> userRegistrations = userRegistrationRepository.findAll();
@@ -47,9 +53,8 @@ public class UserRegistrationService {
         return userRegistrationDTOs;
     }
 
-    public Optional<UserRegistration> getUserRegistrationById(Long id) {
-        return userRegistrationRepository.findById(id);
-    }
+//
+
 
     public EntityResponse<UserRegistrationDTO> createUserRegistration(UserRegistration userRegistration, Set<Privilege> privileges) {
         EntityResponse<UserRegistrationDTO> response = new EntityResponse<>();
@@ -77,6 +82,23 @@ public class UserRegistrationService {
             // Save user registration
             UserRegistration registration = userRegistrationRepository.save(userRegistration);
 
+            // Prepare email parameters
+            String toEmail = userRegistration.getEmail(); // Assuming the email is part of the userRegistration object
+            String ccEmail = ""; // Optional CC email address
+            String subject = "Your Temporary Password";
+            String message = "Dear User,<br><br>Please find your temporary password below:<br><br>";
+            boolean hasAttachment = false;
+            String attachmentName = "";
+            DataSource dataSource = null; // Ensure this is the correct type expected by your sendEmail method
+
+            // Send email with temporary password and user ID
+            try {
+                mailService.sendEmail(toEmail, ccEmail, message, subject, false, null, null, userId, randomPassword);
+            } catch (MessagingException e) {
+                log.error("Failed to send email", e);
+                // Optionally, handle the failure, e.g., by setting an error message in the response
+            }
+
             response.setMessage("Successfully registered Customer");
             response.setEntity(userRegistrationDTO);
             response.setStatusCode(HttpStatus.CREATED.value());
@@ -87,6 +109,7 @@ public class UserRegistrationService {
         }
         return response;
     }
+
 
 
     public UserRegistration updateUserRegistration(Long id, UserRegistration newUserRegistration) {
@@ -121,5 +144,38 @@ public class UserRegistrationService {
         }
         return res;
     }
+
+//    public Optional<UserRegistration> getUserRegistrationByIdWithPrivileges(Long id) {
+//        return userRegistrationRepository.findById(id);
+//    }
+
+    public Optional<UserRegistrationDTO> getUserRegistrationDTOById(Long id) {
+        return userRegistrationRepository.findById(id)
+                .map(this::mapToDTO);
+    }
+
+    private UserRegistrationDTO mapToDTO(UserRegistration userRegistration) {
+        UserRegistrationDTO dto = new UserRegistrationDTO();
+        dto.setId(userRegistration.getId());
+        dto.setFirstName(userRegistration.getFirstName());
+        dto.setMiddleName(userRegistration.getMiddleName());
+        dto.setLastName(userRegistration.getLastName());
+        dto.setUserId(userRegistration.getUserId());
+        dto.setEmail(userRegistration.getEmail());
+        // Exclude privilege field
+        //dto.setPrivilege(userRegistration.getPrivilege());
+        dto.setPhoneNumber(userRegistration.getPhoneNumber());
+        dto.setBranch(userRegistration.getBranch());
+        dto.setNationalIdNumber(userRegistration.getNationalIdNumber());
+        dto.setRole(userRegistration.getRole());
+        dto.setGender(userRegistration.getGender());
+        dto.setUsername(userRegistration.getUsername());
+        dto.setTemporaryPassword(userRegistration.getTemporaryPassword());
+        dto.setAccessPeriod(userRegistration.getAccessPeriod());
+        dto.setCountry(userRegistration.getCountry());
+        return dto;
+    }
+
+
 
 }
