@@ -18,9 +18,14 @@ import java.util.List;
 public class GoogleCalendarService {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String APPLICATION_NAME = "Your Application Name";
+    private static final String APPLICATION_NAME = "Litigation Diary Management System";
+    private final String apiKey;
 
-    public List<Event> getEvents(String calendarId, String apiKey) throws IOException, GeneralSecurityException {
+    public GoogleCalendarService(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public List<Event> getEvents(String calendarId) throws IOException, GeneralSecurityException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, null)
                 .setApplicationName(APPLICATION_NAME)
@@ -32,5 +37,15 @@ public class GoogleCalendarService {
 
         return events.getItems() != null ? events.getItems() : Collections.emptyList();
     }
-}
 
+    public Event createOrUpdateEvent(String calendarId, Event event) throws IOException, GeneralSecurityException {
+        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, null)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        return service.events().insert(calendarId, event)
+                .setKey(apiKey)
+                .execute();
+    }
+}

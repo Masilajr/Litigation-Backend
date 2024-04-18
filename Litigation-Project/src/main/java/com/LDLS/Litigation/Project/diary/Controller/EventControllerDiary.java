@@ -92,25 +92,38 @@ public class EventControllerDiary {
         }
     }
 
-    @PutMapping("/cancel/{id}")
-    public ResponseEntity<EntityResponse> cancelEvent(@PathVariable Long id) {
-        try {
-            Events cancelledEvent = this.eventService.cancelEvent(id);
-
-            EntityResponse response = new EntityResponse();
-            response.setMessage("Event cancelled successfully");
-            response.setEntity(cancelledEvent);
-            response.setStatusCode(HttpStatus.OK.value());
-
-            log.info("Event cancelled successfully: {}", cancelledEvent);
-
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            log.error("Error cancelling event: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    @PutMapping("/cancel/{id}")
+//    public ResponseEntity<EntityResponse> cancelEvent(@PathVariable Long id) {
+//        try {
+//            Events cancelledEvent = this.eventService.cancelEvent(id);
+//
+//            EntityResponse response = new EntityResponse();
+//            response.setMessage("Event cancelled successfully");
+//            response.setEntity(cancelledEvent);
+//            response.setStatusCode(HttpStatus.OK.value());
+//
+//            log.info("Event cancelled successfully: {}", cancelledEvent);
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
+//        } catch (Exception e) {
+//            log.error("Error cancelling event: {}", e.getMessage(), e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+@PutMapping("/cancel/{eventId}")
+public ResponseEntity<String> cancelEvent(@PathVariable Long eventId) {
+    try {
+        Events event = eventService.getEventById(eventId);
+        if (event != null) {
+            eventService.cancelEvent(event);
+            return ResponseEntity.ok("Event cancelled successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error cancelling event: " + e.getMessage());
     }
-
+}
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<EntityResponse> deleteEvent(@PathVariable Long id) {
         try {
