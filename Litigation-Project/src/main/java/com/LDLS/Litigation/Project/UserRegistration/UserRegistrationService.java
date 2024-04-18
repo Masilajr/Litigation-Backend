@@ -1,5 +1,5 @@
 package com.LDLS.Litigation.Project.UserRegistration;
-import com.LDLS.Litigation.Project.Authentication.MailService.MailService;
+import com.LDLS.Litigation.Project.Authentication.MailService.MailsService;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class UserRegistrationService {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    MailService mailService;
+    MailsService mailService;
 
     public List<UserRegistrationDTO> getAllCustomerRegistration() {
         List<UserRegistration> userRegistrations = userRegistrationRepository.findAll();
@@ -86,18 +86,25 @@ public class UserRegistrationService {
             String toEmail = userRegistration.getEmail(); // Assuming the email is part of the userRegistration object
             String ccEmail = ""; // Optional CC email address
             String subject = "Your Temporary Password";
-            String message = "Dear User,<br><br>Please find your temporary password below:<br><br>";
+            String message = "Dear " + userRegistrationDTO.getFirstName() + ",<br><br>"
+                    + "Please find your temporary password below:<br><br>"
+                    + "<strong>" + randomPassword + "</strong><br><br>"
+                    + "Please remember to change your password after logging in.<br><br>"
+                    + "Best regards,<br>"
+                    + "Your Organization";
             boolean hasAttachment = false;
             String attachmentName = "";
-            DataSource dataSource = null; // Ensure this is the correct type expected by your sendEmail method
+            javax.activation.DataSource dataSource = null; // Assuming no attachment is being sent
 
             // Send email with temporary password and user ID
             try {
-                mailService.sendEmail(toEmail, ccEmail, message, subject, false, null, null, userId, randomPassword);
+                // Call the sendEmail method with appropriate parameters
+                mailService.SendEmail(toEmail, ccEmail, message, subject, hasAttachment, attachmentName, dataSource);
             } catch (MessagingException e) {
                 log.error("Failed to send email", e);
                 // Optionally, handle the failure, e.g., by setting an error message in the response
             }
+
 
             response.setMessage("Successfully registered Customer");
             response.setEntity(userRegistrationDTO);

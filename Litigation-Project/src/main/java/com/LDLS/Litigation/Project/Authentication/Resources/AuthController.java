@@ -1,5 +1,5 @@
 package com.LDLS.Litigation.Project.Authentication.Resources;
-import com.LDLS.Litigation.Project.Authentication.MailService.MailService;
+import com.LDLS.Litigation.Project.Authentication.MailService.MailsService;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTP;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTPRepository;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTPService;
@@ -68,9 +68,9 @@ public class AuthController {
     OTPService otpService;
 
     @Autowired
-    MailService mailService;
+    MailsService mailService;
     @Autowired
-    MailService mailsService;
+    MailsService mailsService;
     @Value("${from_mail}")
     private String fromEmail;
     @Value("${emailOrganizationName}")
@@ -141,19 +141,20 @@ public class AuthController {
 
 //                String mailMessage = "Dear " + user.getFirstName() + " your account has been successfully created using username " + user.getUsername()
                 String mailMessage = "<p>Dear <strong>" + user.getFirstName() + "</strong>,</p>\n" +
-                        " Your account has been successfully created using username " + user.getUsername()
-                        + " and password " + signUpRequest.getPassword();
+                        " Your account has been successfully created with username " + user.getUsername()
+                        + " and temporary password " + signUpRequest.getPassword();
                 String subject = "Account creation";
                 String temporaryPassword = generateTemporaryPassword();
                 String userId = user.getUserId();
 
 
-                mailService.sendEmail(users.getEmail(), null, mailMessage, subject, false, null, null, userId, temporaryPassword);
+                mailService.SendEmail(users.getEmail(), null, mailMessage, subject, false, null, null);
                 response.setMessage("User " + user.getUsername() + " registered successfully!");
                 response.setStatusCode(HttpStatus.CREATED.value());
                 response.setEntity(users);
 
                 return response;
+
 
             }
         } catch (Exception e) {
@@ -266,7 +267,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
-        mailService.sendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null, null, null);
+        mailService.SendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null);
 
 
         JwtResponse response = new JwtResponse();
