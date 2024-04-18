@@ -168,6 +168,22 @@ public class EventControllerDiary {
     public List<Events> getCompletedEvents(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate today) {
         return eventService.getCompletedEvents(today);
     }
+    @PutMapping("/{eventId}/updateStatus")
+    public ResponseEntity<String> updateEventStatus(@PathVariable("eventId") Long eventId,
+                                                    @RequestParam(value = "isCompleted", required = false) Boolean isCompleted) {
+        try {
+            Events event = eventService.getEventById(eventId);
+            if (event == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            eventService.updateEventStatus(event, isCompleted != null && isCompleted);
+
+            return ResponseEntity.ok("Event status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating event status: " + e.getMessage());
+        }
+    }
 //    @GetMapping("/completed")
 //    public List<Events> getCompletedEventsInChronologicalOrder() {
 //        return eventService.getCompletedEventsInChronologicalOrder();

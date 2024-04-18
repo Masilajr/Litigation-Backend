@@ -30,6 +30,7 @@ public class Events {
     private LocalDate eventDate;
     private boolean cancelled;
     private LocalDateTime completionTime;
+    private String status;
 
 //    public Events() {
 //    }

@@ -24,9 +24,13 @@ public class EventService {
     }
 
 
-    public Events createEvent(Events event) {
-        return eventRepository.save(event);
-    }
+
+        public Events createEvent(Events events) {
+            events.setStatus("Pending");
+
+            // Save event to database or perform other operations
+            return events;
+        }
 
     public List<Events> getAllEvents() {
         return eventRepository.findAll();
@@ -46,6 +50,7 @@ public class EventService {
         event.setDescription(updatedEvent.getDescription());
         return eventRepository.save(event);
     }
+
 
     public Events cancelEvent(Long id) {
         Events event = getEventById(id);
@@ -79,6 +84,28 @@ public class EventService {
                 throw new IllegalArgumentException("Invalid event status: " + status);
         }
     }
+    public void updateEventStatus(Events events, boolean isCompleted) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate eventDate = events.getEventDate();
+
+        if (isCompleted) {
+            events.setStatus("Completed"); // If the frontend marks it as completed
+        } else if (eventDate.isEqual(currentDate)) {
+            events.setStatus("active"); // If the event is happening today
+        } else if (eventDate.isBefore(currentDate)) {
+            events.setStatus("Overdue"); // If the event date has passed
+        } else {
+            events.setStatus("Upcoming"); // If the event date is in the future
+        }
+        eventRepository.save(events); // Save updated event
+    }
+
+
+    public void cancelEvent(Events events) {
+        events.setStatus("Cancelled");
+        eventRepository.save(events); // Save updated event
+    }
+
     public List<Events> getPendingEvents(LocalDate today) {
         return eventRepository.findAllByEventDateGreaterThanEqualAndCancelledFalse(today)
                 .stream()
