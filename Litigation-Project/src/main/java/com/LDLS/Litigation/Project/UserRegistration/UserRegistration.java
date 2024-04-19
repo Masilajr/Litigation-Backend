@@ -32,6 +32,7 @@ public class UserRegistration {
     private String nationalIdNumber;
     private String role;
     private String gender;
+    private boolean firstLogin = true;
     private String username;
     private String temporaryPassword;
 

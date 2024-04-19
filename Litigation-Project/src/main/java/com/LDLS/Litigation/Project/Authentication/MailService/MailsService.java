@@ -44,25 +44,9 @@ public class MailsService extends Thread {
     JavaMailSender javaMailSender;
     @Autowired
     UsersRepository usersRepository;
-//    ClassPathResource logo = new ClassPathResource("Em-Tech-logo.png");
-//    ClassPathResource banner = new ClassPathResource("Em-Tech-banner.png");
-//    public void SendEmail(String to,String cc, String message, String subject, boolean hasAttachment, String attachmentName, DataSource dataSource) throws MessagingException {
-//        if (enableEmail.equalsIgnoreCase("false")) {
-//            log.info("--------------------- Email sending is disabled! Check application.yml");
-//        } else {
-//            log.info("--------------------- Email is enabled!");
-//            executorService.execute(() -> {
-//                try{
-//                    MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//                    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-//                    helper.setTo(to);
-//                    helper.setFrom(fromEmail);
-//
-//                    if (cc!=null){
-//                        helper.setCc(cc);
-//                    }
-//                    helper.setSubject(subject);
-//                    helper.setText(
+
+    ClassPathResource logo = new ClassPathResource("Em-Tech-logo.png");
+    ClassPathResource banner = new ClassPathResource("Em-Tech-banner.png");
 
     public void SendEmail(String to, String cc, String message, String subject, boolean hasAttachment, String attachmentName, DataSource dataSource) throws MessagingException {
         if (enableEmail.equalsIgnoreCase("false")) {
@@ -150,7 +134,9 @@ public class MailsService extends Thread {
                                     "              </td>\n" +
                                     "            <tr>\n" +
                                     "              <td style=\"padding:30px;background-color:#ffffff;\">\n" +
-                                    "                 <h1 style=\"margin-top:0;margin-bottom:16px;font-size:26px;line-height:32px;font-weight:bold;letter-spacing:-0.02em;\">" + emailSalutation + " "+getFirstName(to)+"," +"</h1>\n" +
+                                    "                 <h1 style=\"margin-top:0;margin-bottom:16px;font-size:26px;line-height:32px;font-weight:bold;letter-spacing:-0.02em;\">"+
+                                    /* + emailSalutation + " "+getFirstName(to)+"," +"*/
+                                    "</h1>\n" +
 //                                    "                   <h1 style=\"margin-top:0;margin-bottom:16px;font-size:26px;line-height:32px;font-weight:bold;letter-spacing:-0.02em;\">" + emailSalutation + " "+getFirstName(to)+"," +"</h1>\n" +
                                     "                    </p>\n" +
                                     "                   <p style=\"margin:0;\">\n" + message + "\n" +
@@ -188,8 +174,8 @@ public class MailsService extends Thread {
                                     "  </div>\n" +
                                     "</body>\n" +
                                     "</html>", true);
-                   // helper.addInline("companyLogo",logo);
-//                    helper.addInline("rightSideImage",banner);
+                    helper.addInline("companyLogo",logo);
+                    helper.addInline("rightSideImage",banner);
                     if (hasAttachment && dataSource != null) {
                         helper.addAttachment(attachmentName, dataSource);
                     }
@@ -200,16 +186,6 @@ public class MailsService extends Thread {
                     log.error("Failed to send email", e);
                 }
             });
-//                    if (hasAttachment){
-//                        helper.addAttachment(attachmentName,dataSource);
-//                    }
-//                    log.info("--------------------- Sending email...");
-//                    javaMailSender.send(mimeMessage);
-//                    log.info("--------------------- Mail sent successfully to: " + to);
-//                }catch (Exception e){
-//                    log.info(e.toString());
-//                }
-//            });
 
         }
     }

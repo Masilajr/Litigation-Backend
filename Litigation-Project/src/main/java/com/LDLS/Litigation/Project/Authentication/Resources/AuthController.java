@@ -238,7 +238,6 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/admin/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) throws MessagingException {
         System.out.println("Authentication----------------------------------------------------------------------");

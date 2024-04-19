@@ -72,7 +72,7 @@ public class UserRegistrationService {
                 return response;
             }
 
-            String randomPassword = passwordEncoder.encode("randomPassword");
+            String randomPassword = generateRandomPassword();
             userRegistration.setTemporaryPassword(randomPassword);
 
             // Set user privileges
@@ -82,29 +82,29 @@ public class UserRegistrationService {
             // Save user registration
             UserRegistration registration = userRegistrationRepository.save(userRegistration);
 
+            String firstNameFromRequest = userRegistration.getFirstName();
+            userRegistrationDTO.setFirstName(firstNameFromRequest); // Set first name
+
             // Prepare email parameters
-            String toEmail = userRegistration.getEmail(); // Assuming the email is part of the userRegistration object
+            String toEmail = userRegistration.getEmail();
             String ccEmail = ""; // Optional CC email address
-            String subject = "Your Temporary Password";
+            String subject = "Your Temporary Password and Username";
             String message = "Dear " + userRegistrationDTO.getFirstName() + ",<br><br>"
-                    + "Please find your temporary password below:<br><br>"
-                    + "<strong>" + randomPassword + "</strong><br><br>"
-                    + "Please remember to change your password after logging in.<br><br>"
-                    + "Best regards,<br>"
-                    + "Your Organization";
+                    + "Please find your temporary password and username below:<br><br>"
+                    + "<strong>Username:</strong> " + userRegistration.getUsername() + "<br>"
+                    + "<strong>Password:</strong> " + randomPassword + "<br><br>"
+                    + "Please remember to change your password after logging in.<br><br>";
             boolean hasAttachment = false;
             String attachmentName = "";
             javax.activation.DataSource dataSource = null; // Assuming no attachment is being sent
 
-            // Send email with temporary password and user ID
+            // Send email with temporary password and username
             try {
-                // Call the sendEmail method with appropriate parameters
                 mailService.SendEmail(toEmail, ccEmail, message, subject, hasAttachment, attachmentName, dataSource);
             } catch (MessagingException e) {
                 log.error("Failed to send email", e);
                 // Optionally, handle the failure, e.g., by setting an error message in the response
             }
-
 
             response.setMessage("Successfully registered Customer");
             response.setEntity(userRegistrationDTO);
@@ -116,6 +116,20 @@ public class UserRegistrationService {
         }
         return response;
     }
+
+
+
+    // Method to generate a random alphanumeric password with length 8
+    private String generateRandomPassword() {
+        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder(8);
+        for (int i = 0; i < 8; i++) {
+            int index = (int)(alphanumeric.length() * Math.random());
+            sb.append(alphanumeric.charAt(index));
+        }
+        return sb.toString();
+    }
+
 
 
 

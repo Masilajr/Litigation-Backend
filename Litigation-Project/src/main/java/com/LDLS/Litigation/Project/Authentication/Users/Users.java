@@ -59,6 +59,7 @@ public class Users {
     private boolean isAcctActive;
     @Column(name = "first_login", length = 1)
     private Character firstLogin = 'Y';
+    //private boolean firstLogin;
     @Column(name = "locked", length = 15)
     private boolean isAcctLocked;
     private String userId;
@@ -82,4 +83,5 @@ public class Users {
     public String getUserId() {
         return userId;
     }
+
 }
