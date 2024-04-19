@@ -21,6 +21,7 @@ public class UserRegistrationDTO {
     private String role;
     private String gender;
     private String username;
+    private boolean firstLogin = true;
     private String temporaryPassword;
     private String accessPeriod;
     private String country;
