@@ -29,7 +29,7 @@ public class EventService {
             events.setStatus("Pending");
 
             // Save event to database or perform other operations
-            return events;
+            return eventRepository.save(events);
         }
 
     public List<Events> getAllEvents() {
