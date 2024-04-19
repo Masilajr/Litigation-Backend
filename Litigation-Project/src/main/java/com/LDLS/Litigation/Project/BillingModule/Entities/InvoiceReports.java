@@ -15,7 +15,7 @@ public class InvoiceReports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private Double amount;
+    private Double invoiceAmount;
     private String paymentStatus;
     private String invoiceNumber;
     private String contactInformation;
@@ -23,6 +23,7 @@ public class InvoiceReports {
     private LocalDate billingPeriodFrom;
     private LocalDate billingPeriodTo;
     private String customerName;
+    private String customerAddress;
     private LocalDate dueDate;
 //    private Double latePaymentFees;
 //      private String returnPolicy;

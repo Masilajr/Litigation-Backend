@@ -39,7 +39,7 @@ public class InvoiceReportsController {
         existingInvoiceReports.setBillingPeriodTo(invoiceDetailsReports.getBillingPeriodTo());
 //        existingInvoiceReports.setLatePaymentFees(invoiceDetailsReports.getLatePaymentFees());
 //        existingInvoiceReports.setReturnPolicy(invoiceDetailsReports.getReturnPolicy());
-        existingInvoiceReports.setAmount(invoiceDetailsReports.getAmount());
+        existingInvoiceReports.setInvoiceAmount(invoiceDetailsReports.getInvoiceAmount());
         existingInvoiceReports.setPaymentStatus(invoiceDetailsReports.getPaymentStatus());
 
         InvoiceReports updatedInvoiceReports = invoiceReportsRepository.save(existingInvoiceReports);

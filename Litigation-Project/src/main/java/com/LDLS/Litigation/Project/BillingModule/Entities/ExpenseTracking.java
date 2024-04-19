@@ -1,5 +1,6 @@
 package com.LDLS.Litigation.Project.BillingModule.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,14 +22,15 @@ public class ExpenseTracking {
 
     @ManyToOne
     @JoinColumn(name = "billing_report_id")
+    @JsonIgnore
     private BillingReport billingReport;
 
-    private String type;
-    private String description;
-    private Double amount;
+    private String expenseType;
+    private String expenseDescription;
+    private Double expenseAmount;
     private LocalDate expenseDate;
-    private String approver;
-    private LocalDate approvalDate;
-    private String approvalStatus;
+    private String expenseApprover;
+    private LocalDate expenseApprovalDate;
+    private String expenseApprovalStatus;
 
 }
