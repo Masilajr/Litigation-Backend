@@ -1,7 +1,6 @@
 package com.LDLS.Litigation.Project.UserRegistration;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
-import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 
 
-import javax.persistence.EntityGraph;
 import java.util.*;
 
 @RestController
@@ -81,6 +79,11 @@ public class UserRegistrationController {
         return userRegistrationService.getUserRegistrationDTOById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public List<UserRegistrationDTO> search(@RequestParam(required = false) String userId, @RequestParam(required = false) String nationalIdNumber) {
+        return userRegistrationService.searchByUserIdOrNationalIdNumber(userId, nationalIdNumber);
     }
 
 

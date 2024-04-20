@@ -191,21 +191,27 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Check if it's the user's first login
+            if (existingUser.getFirstLogin() == 'Y')  {
+                // Redirect to change password page
+                response.setMessage("First-time login. Please change your password.");
+                response.setStatusCode(HttpStatus.FOUND.value());
+                response.setEntity("redirect:/change-password");
+                return ResponseEntity.status(HttpStatus.FOUND).body(response);
+            }
+
+            // Generate JWT token
             String jwt = jwtUtils.generateJwtToken(authentication);
-            Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
-            jwtTokenCookie.setMaxAge(86400);
-            jwtTokenCookie.setSecure(true);
-            jwtTokenCookie.setHttpOnly(true);
-            jwtTokenCookie.setPath("/user/");
-            res.addCookie(jwtTokenCookie);
+
+            // Set JWT token as a cookie
             Cookie accessTokenCookie = new Cookie("accessToken", jwt);
             accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
             accessTokenCookie.setSecure(true);
             accessTokenCookie.setHttpOnly(true);
             res.addCookie(accessTokenCookie);
-            Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
-            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-            res.addCookie(userNameCookie);
+
+            // Prepare JWT response
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
@@ -233,55 +239,70 @@ public class AuthController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("An error occurred during user authentication");
-            log.info("Exception {}",e);
+            log.error("Exception during user authentication", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
+
     @PostMapping("/admin/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) throws MessagingException {
-        System.out.println("Authentication----------------------------------------------------------------------");
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        Users user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
-        log.info("Username is {}", loginRequest.getUsername());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
-        jwtTokenCookie.setMaxAge(86400);
-        jwtTokenCookie.setSecure(true);
-        jwtTokenCookie.setHttpOnly(true);
-        jwtTokenCookie.setPath("/user/");
-        res.addCookie(jwtTokenCookie);
-        Cookie accessTokenCookie = new Cookie("accessToken", jwt);
-        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setHttpOnly(true);
-        res.addCookie(accessTokenCookie);
-        Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
-        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-        res.addCookie(userNameCookie);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-        String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
-        mailService.SendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null);
+        EntityResponse<JwtResponse> response = new EntityResponse<>();
+        // Check if the user exists based on the username
+        Optional<Users> existingUserOptional = userRepository.findByUsername(loginRequest.getUsername());
+        if (existingUserOptional.isEmpty()) {
+            response.setMessage("User not found.");
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        Users existingUser = existingUserOptional.get();
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
+            jwtTokenCookie.setMaxAge(86400);
+            jwtTokenCookie.setSecure(true);
+            jwtTokenCookie.setHttpOnly(true);
+            jwtTokenCookie.setPath("/user/");
+            res.addCookie(jwtTokenCookie);
+            Cookie accessTokenCookie = new Cookie("accessToken", jwt);
+            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
+            accessTokenCookie.setSecure(true);
+            accessTokenCookie.setHttpOnly(true);
+            res.addCookie(accessTokenCookie);
+            Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
+            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
+            res.addCookie(userNameCookie);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+//            String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
+//            mailService.SendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null);
 
+            JwtResponse jwtResponse = new JwtResponse();
+            jwtResponse.setToken(jwt);
+            jwtResponse.setType("Bearer");
+            jwtResponse.setId(userDetails.getId());
+            jwtResponse.setUsername(userDetails.getUsername());
+            jwtResponse.setEmail(userDetails.getEmail());
+            jwtResponse.setRoles(roles);
+            jwtResponse.setFirstLogin(existingUser.getFirstLogin());
+            jwtResponse.setIsAcctActive(userDetails.getAcctActive());
 
-        JwtResponse response = new JwtResponse();
-        response.setToken(jwt);
-        response.setType("Bearer");
-        response.setId(userDetails.getId());
-        response.setUsername(userDetails.getUsername());
-        response.setEmail(userDetails.getEmail());
-        response.setRoles(roles);
-//        response.setSolCode(user.getSolCode());
-//        response.setEmpNo(user.getEmpNo());
-        response.setFirstLogin(user.getFirstLogin());
-//        response.setRoleClassification(user.getRoleClassification());
-        response.setIsAcctActive(userDetails.getAcctActive());
-        return ResponseEntity.ok(response);
+            response.setMessage("successfully signed in");
+            response.setStatusCode(HttpStatus.CREATED.value());
+            response.setEntity(jwtResponse);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("An error occurred during user authentication");
+            log.info("Exception {}", e);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 

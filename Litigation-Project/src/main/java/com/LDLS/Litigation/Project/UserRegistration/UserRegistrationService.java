@@ -1,6 +1,7 @@
 package com.LDLS.Litigation.Project.UserRegistration;
 import com.LDLS.Litigation.Project.Authentication.MailService.MailsService;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
+import com.LDLS.Litigation.Project.ClientManagement.ClientManagement;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -128,6 +129,13 @@ public class UserRegistrationService {
             sb.append(alphanumeric.charAt(index));
         }
         return sb.toString();
+    }
+
+    public List<UserRegistrationDTO> searchByUserIdOrNationalIdNumber(String userId, String nationalIdNumber) {
+        if (userId == null && nationalIdNumber == null) {
+            throw new IllegalArgumentException("At least one of userId or NationalIdNumber must be provided.");
+        }
+        return userRegistrationRepository.findByUserIdorNationalIdNumber(userId, nationalIdNumber);
     }
 
 

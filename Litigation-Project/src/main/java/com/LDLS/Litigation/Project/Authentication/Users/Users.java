@@ -59,7 +59,7 @@ public class Users {
     private boolean isAcctActive;
     @Column(name = "first_login", length = 1)
     private Character firstLogin = 'Y';
-    //private boolean firstLogin;
+    //private boolean firstLogin = true; // Initialize to true if first login is required by default
     @Column(name = "locked", length = 15)
     private boolean isAcctLocked;
     private String userId;
