@@ -26,4 +26,25 @@ public class UserRegistrationDTO {
     private String accessPeriod;
     private String country;
 
+    public UserRegistrationDTO(Long id, String firstName, String middleName, String lastName, String userId, String email, Long phoneNumber, String branch, String nationalIdNumber, String role, String gender, String username, boolean firstLogin, String accessPeriod, String country) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.userId = userId;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.branch = branch;
+        this.nationalIdNumber = nationalIdNumber;
+        this.role = role;
+        this.gender = gender;
+        this.username = username;
+        this.firstLogin = firstLogin;
+        //this.temporaryPassword = temporaryPassword;
+        this.accessPeriod = accessPeriod;
+        this.country = country;
+    }
+
+
+
 }
