@@ -1,7 +1,7 @@
 package com.LDLS.Litigation.Project.BillingModule.Controllers;
 
 import com.LDLS.Litigation.Project.BillingModule.Entities.ExpenseTracking;
-import com.LDLS.Litigation.Project.BillingModule.Entities.Invoice;
+import com.LDLS.Litigation.Project.BillingModule.Entities.InvoiceReports;
 import com.LDLS.Litigation.Project.BillingModule.Services.BillingReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +24,11 @@ public class BillingReportController {
 
     @GetMapping(value = "/billing/reports", produces = "application/json")
     public ResponseEntity<Map<String, List<?>>> generateBillingReport() {
-        List<Invoice> invoices = billingService.getAllInvoices();
+        List<InvoiceReports> invoicesReports = billingService.getAllInvoicesReports();
         List<ExpenseTracking> expenses = billingService.getAllExpenses();
 
         Map<String, List<?>> report = new HashMap<>();
-        report.put("invoices", invoices);
+        report.put("invoicesReports", invoicesReports);
         report.put("expenses", expenses);
 
         return ResponseEntity.ok(report);

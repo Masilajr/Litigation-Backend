@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+<<<<<<< HEAD
 @RequestMapping("/api/invoices/reports")
+=======
+@RequestMapping("/api/invoices")
+>>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
 public class InvoiceReportsController {
 
     @Autowired

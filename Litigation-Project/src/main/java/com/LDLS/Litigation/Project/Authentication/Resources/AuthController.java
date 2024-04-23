@@ -1,5 +1,5 @@
 package com.LDLS.Litigation.Project.Authentication.Resources;
-import com.LDLS.Litigation.Project.Authentication.MailService.MailService;
+import com.LDLS.Litigation.Project.Authentication.MailService.MailsService;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTP;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTPRepository;
 import com.LDLS.Litigation.Project.Authentication.OTP.OTPService;
@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/auth")
 @Slf4j
+@CrossOrigin
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -67,9 +68,9 @@ public class AuthController {
     OTPService otpService;
 
     @Autowired
-    MailService mailService;
+    MailsService mailService;
     @Autowired
-    MailService mailsService;
+    MailsService mailsService;
     @Value("${from_mail}")
     private String fromEmail;
     @Value("${emailOrganizationName}")
@@ -140,16 +141,20 @@ public class AuthController {
 
 //                String mailMessage = "Dear " + user.getFirstName() + " your account has been successfully created using username " + user.getUsername()
                 String mailMessage = "<p>Dear <strong>" + user.getFirstName() + "</strong>,</p>\n" +
-                        " Your account has been successfully created using username " + user.getUsername()
-                        + " and password " + signUpRequest.getPassword();
+                        " Your account has been successfully created with username " + user.getUsername()
+                        + " and temporary password " + signUpRequest.getPassword();
                 String subject = "Account creation";
+                String temporaryPassword = generateTemporaryPassword();
+                String userId = user.getUserId();
 
-                mailService.sendEmail(users.getEmail(), null, mailMessage, subject, false, null, null);
+
+                mailService.SendEmail(users.getEmail(), null, mailMessage, subject, false, null, null);
                 response.setMessage("User " + user.getUsername() + " registered successfully!");
                 response.setStatusCode(HttpStatus.CREATED.value());
                 response.setEntity(users);
 
                 return response;
+
 
             }
         } catch (Exception e) {
@@ -158,6 +163,13 @@ public class AuthController {
             return null;
         }
     }
+
+    private String generateTemporaryPassword() {
+        String temporaryPassword = UUID.randomUUID().toString().replace("-", "");
+        // Optionally, you can add additional logic here to ensure the password meets your security requirements
+        return temporaryPassword;
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) throws MessagingException {
         EntityResponse response = new EntityResponse<>();
@@ -179,21 +191,27 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Check if it's the user's first login
+            if (existingUser.getFirstLogin() == 'Y')  {
+                // Redirect to change password page
+                response.setMessage("First-time login. Please change your password.");
+                response.setStatusCode(HttpStatus.FOUND.value());
+                response.setEntity("redirect:/change-password");
+                return ResponseEntity.status(HttpStatus.FOUND).body(response);
+            }
+
+            // Generate JWT token
             String jwt = jwtUtils.generateJwtToken(authentication);
-            Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
-            jwtTokenCookie.setMaxAge(86400);
-            jwtTokenCookie.setSecure(true);
-            jwtTokenCookie.setHttpOnly(true);
-            jwtTokenCookie.setPath("/user/");
-            res.addCookie(jwtTokenCookie);
+
+            // Set JWT token as a cookie
             Cookie accessTokenCookie = new Cookie("accessToken", jwt);
             accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
             accessTokenCookie.setSecure(true);
             accessTokenCookie.setHttpOnly(true);
             res.addCookie(accessTokenCookie);
-            Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
-            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-            res.addCookie(userNameCookie);
+
+            // Prepare JWT response
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
@@ -221,7 +239,7 @@ public class AuthController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("An error occurred during user authentication");
-            log.info("Exception {}",e);
+            log.error("Exception during user authentication", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -229,47 +247,62 @@ public class AuthController {
 
     @PostMapping("/admin/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) throws MessagingException {
-        System.out.println("Authentication----------------------------------------------------------------------");
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        Users user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
-        log.info("Username is {}", loginRequest.getUsername());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
-        jwtTokenCookie.setMaxAge(86400);
-        jwtTokenCookie.setSecure(true);
-        jwtTokenCookie.setHttpOnly(true);
-        jwtTokenCookie.setPath("/user/");
-        res.addCookie(jwtTokenCookie);
-        Cookie accessTokenCookie = new Cookie("accessToken", jwt);
-        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setHttpOnly(true);
-        res.addCookie(accessTokenCookie);
-        Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
-        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
-        res.addCookie(userNameCookie);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-//        String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
-//        mailService.sendEmail(userDetails.getEmail(), otp, "OTP Code");
+        EntityResponse<JwtResponse> response = new EntityResponse<>();
+        // Check if the user exists based on the username
+        Optional<Users> existingUserOptional = userRepository.findByUsername(loginRequest.getUsername());
+        if (existingUserOptional.isEmpty()) {
+            response.setMessage("User not found.");
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        Users existingUser = existingUserOptional.get();
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            Cookie jwtTokenCookie = new Cookie("user-id", "c2FtLnNtaXRoQGV4YW1wbGUuY29t");
+            jwtTokenCookie.setMaxAge(86400);
+            jwtTokenCookie.setSecure(true);
+            jwtTokenCookie.setHttpOnly(true);
+            jwtTokenCookie.setPath("/user/");
+            res.addCookie(jwtTokenCookie);
+            Cookie accessTokenCookie = new Cookie("accessToken", jwt);
+            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
+            accessTokenCookie.setSecure(true);
+            accessTokenCookie.setHttpOnly(true);
+            res.addCookie(accessTokenCookie);
+            Cookie userNameCookie = new Cookie("username", loginRequest.getUsername());
+            accessTokenCookie.setMaxAge(1 * 24 * 60 * 60); // expires in 1 day
+            res.addCookie(userNameCookie);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+//            String otp = "Your otp code is " + otpService.generateOTP(userDetails.getUsername());
+//            mailService.SendEmail(userDetails.getEmail(), null, otp, "OTP Code", false, null, null);
 
-        JwtResponse response = new JwtResponse();
-        response.setToken(jwt);
-        response.setType("Bearer");
-        response.setId(userDetails.getId());
-        response.setUsername(userDetails.getUsername());
-        response.setEmail(userDetails.getEmail());
-        response.setRoles(roles);
-//        response.setSolCode(user.getSolCode());
-//        response.setEmpNo(user.getEmpNo());
-        response.setFirstLogin(user.getFirstLogin());
-//        response.setRoleClassification(user.getRoleClassification());
-        response.setIsAcctActive(userDetails.getAcctActive());
-        return ResponseEntity.ok(response);
+            JwtResponse jwtResponse = new JwtResponse();
+            jwtResponse.setToken(jwt);
+            jwtResponse.setType("Bearer");
+            jwtResponse.setId(userDetails.getId());
+            jwtResponse.setUsername(userDetails.getUsername());
+            jwtResponse.setEmail(userDetails.getEmail());
+            jwtResponse.setRoles(roles);
+            jwtResponse.setFirstLogin(existingUser.getFirstLogin());
+            jwtResponse.setIsAcctActive(userDetails.getAcctActive());
+
+            response.setMessage("successfully signed in");
+            response.setStatusCode(HttpStatus.CREATED.value());
+            response.setEntity(jwtResponse);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("An error occurred during user authentication");
+            log.info("Exception {}", e);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 
@@ -419,7 +452,7 @@ public class AuthController {
             if (user.isPresent()){
                 Users existingUser = user.get();
                 existingUser.setPassword(encoder.encode(generatedPassword));
-                existingUser.setSystemGenPassword(true);
+                //existingUser.setSystemGenPassword(true);
                 existingUser.setModifiedBy(user.get().getUsername());
                 //newuser.setModifiedBy(newuser.getUsername());
                 existingUser.setModifiedOn(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
@@ -433,7 +466,7 @@ public class AuthController {
                                 "    <li>Password: <strong>"+ generatedPassword +"</strong></li>\n" +
                                 "  </ul>\n" +
                                 "  <p>Please login to change your password.</p>";
-                mailsService.sendEmail(existingUser.getEmail(),null, mailMessage, subject, false, null, null);
+                //mailsService.sendEmail(existingUser.getEmail(),null, mailMessage, subject, false, null, null);
                 EntityResponse response = new EntityResponse();
                 response.setMessage("Password Reset Successfully! Password has been sent to the requested email");
                 response.setStatusCode(HttpStatus.OK.value());

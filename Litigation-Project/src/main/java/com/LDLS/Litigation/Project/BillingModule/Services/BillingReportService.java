@@ -2,25 +2,25 @@ package com.LDLS.Litigation.Project.BillingModule.Services;
 
 import com.LDLS.Litigation.Project.BillingModule.Entities.BillingReport;
 import com.LDLS.Litigation.Project.BillingModule.Entities.ExpenseTracking;
-import com.LDLS.Litigation.Project.BillingModule.Entities.Invoice;
+import com.LDLS.Litigation.Project.BillingModule.Entities.InvoiceReports;
 import com.LDLS.Litigation.Project.BillingModule.Repositories.ExpenseTrackingRepository;
-import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceRepository;
+import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceReportsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BillingReportService {
-    private final InvoiceRepository invoiceRepository;
+    private final InvoiceReportsRepository invoiceReportsRepository;
     private final ExpenseTrackingRepository expenseTrackingRepository;
 
-    public BillingReportService(InvoiceRepository invoiceRepository, ExpenseTrackingRepository expenseTrackingRepository) {
-        this.invoiceRepository = invoiceRepository;
+    public BillingReportService(InvoiceReportsRepository invoiceReportsRepository, ExpenseTrackingRepository expenseTrackingRepository) {
+        this.invoiceReportsRepository = invoiceReportsRepository;
         this.expenseTrackingRepository = expenseTrackingRepository;
     }
 
-    public List<Invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
+    public List<InvoiceReports> getAllInvoicesReports() {
+        return invoiceReportsRepository.findAll();
     }
 
     public List<ExpenseTracking> getAllExpenses() {
@@ -28,13 +28,13 @@ public class BillingReportService {
     }
 
     public BillingReport generateBillingReport() {
-        List<Invoice> invoices = getAllInvoices();
+        List<InvoiceReports> invoicesReports = getAllInvoicesReports();
         List<ExpenseTracking> expenses = getAllExpenses();
 
 
         BillingReport report = new BillingReport();
-        for (Invoice invoice : invoices) {
-            invoice.setBillingReport(report);
+        for (InvoiceReports invoiceReports : invoicesReports) {
+            invoiceReports.setBillingReport(report);
         }
 
         for (ExpenseTracking expense : expenses) {

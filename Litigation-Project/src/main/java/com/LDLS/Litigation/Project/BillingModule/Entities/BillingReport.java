@@ -19,6 +19,6 @@ public class BillingReport {
     // If it's a one-to-many relationship, you should annotate it similarly to expenses.
 
     @OneToMany(mappedBy = "billingReport", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Invoice> invoices;
+    private List<InvoiceReports> invoicesReports;
 
 }
