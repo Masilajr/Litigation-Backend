@@ -6,8 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
-
-
 import java.util.*;
 
 @RestController
@@ -24,15 +22,16 @@ public class UserRegistrationController {
     @Autowired
     EntityManager entityManager;
 
-//    @PostMapping("/create")
-//    public ResponseEntity<EntityResponse> createUserRegistration(@RequestBody UserRegistrationDTO userRegistration) {
-//        try {
-//            EntityResponse response = userRegistrationService.createUserRegistration(userRegistration);
-//            return ResponseEntity.ok().body(response);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
+    @GetMapping("/active-users")
+    public long getActiveUsersCount() {
+        return userRegistrationService.countActiveUsers();
+    }
+
+    @GetMapping("/locked-users")
+    public long getLockedUsersCount() {
+        return userRegistrationService.countLockedUsers();
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<EntityResponse<UserRegistrationDTO>> createUserRegistration(@RequestBody UserRegistration userRegistration) {
@@ -107,12 +106,27 @@ public class UserRegistrationController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<UserRegistration> updateUserRegistration(
-            @PathVariable Long id, @RequestBody UserRegistration userRegistration)
-    {
-        UserRegistration updatedUserRegistration =
-                userRegistrationService.updateUserRegistration(id, userRegistration);
+            @PathVariable Long id,
+            @RequestBody UserRegistration userRegistration) {
+        UserRegistration updatedUserRegistration = userRegistrationService.updateUserRegistration(id, userRegistration);
         return ResponseEntity.ok(updatedUserRegistration);
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<UserRegistration> updateUserStatus(@PathVariable Long id, @RequestBody String status) {
+        try {
+            UserRegistration updatedUser = userRegistrationService.updateUserStatus(id, status);
+            return ResponseEntity.ok(updatedUser);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<EntityResponse> deleteUserRegistration(@PathVariable Long id) {
