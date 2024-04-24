@@ -25,8 +25,10 @@ public class UserRegistrationDTO {
     private String temporaryPassword;
     private String accessPeriod;
     private String country;
+    private String status;
 
-    public UserRegistrationDTO(Long id, String firstName, String middleName, String lastName, String userId, String email, Long phoneNumber, String branch, String nationalIdNumber, String role, String gender, String username, boolean firstLogin, String accessPeriod, String country) {
+
+    public UserRegistrationDTO(Long id, String firstName, String middleName, String lastName, String userId, String email, Long phoneNumber, String branch, String nationalIdNumber, String role, String gender, String username, boolean firstLogin, String accessPeriod, String country, String status) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -40,9 +42,9 @@ public class UserRegistrationDTO {
         this.gender = gender;
         this.username = username;
         this.firstLogin = firstLogin;
-        //this.temporaryPassword = temporaryPassword;
         this.accessPeriod = accessPeriod;
         this.country = country;
+        this.status = status;
     }
 
 

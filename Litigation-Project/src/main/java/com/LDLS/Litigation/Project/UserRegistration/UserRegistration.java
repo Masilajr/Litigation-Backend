@@ -36,6 +36,8 @@ public class UserRegistration {
     private String username;
     private String temporaryPassword;
 
+    private String status;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<Privilege> privileges;
