@@ -1,4 +1,20 @@
-<<<<<<< HEAD
+#<<<<<<< HEAD
+### MySQL Configurations
+##server:
+##  port: 7200
+##
+##spring:
+##  datasource:
+##    url: jdbc:mariadb://localhost:3306/emtech_litigation
+##    username: root
+##    password:
+##  #
+##  #    url: jdbc:mariadb://52.15.152.26:3306/LITIGATION
+##  #    username: emtech
+##  #    password: emtech@2022
+##  driverClassName: org.mariadb.jdbc.Driver
+#=======
+#<<<<<<< HEAD
 ## MySQL Configurations
 #server:
 #  port: 7200
@@ -13,123 +29,6 @@
 #  #    username: emtech
 #  #    password: emtech@2022
 #  driverClassName: org.mariadb.jdbc.Driver
-=======
-<<<<<<< HEAD
-# MySQL Configurations
-server:
-  port: 7200
-
-spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3306/emtech_litigation
-    username: root
-    password:
-  #
-  #    url: jdbc:mariadb://52.15.152.26:3306/LITIGATION
-  #    username: emtech
-  #    password: emtech@2022
-  driverClassName: org.mariadb.jdbc.Driver
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: update
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MariaDBDialect
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 1GB
-      max-request-size: 1GB
-
-file:
-  upload-dir: src/main/resources/uploads
-Trainingfile:
-  upload-dir: src/main/resources/uploads
-myapp:
-  upload-directory: src/main/resources/uploads/videos
-reports_absolute_path: src/main/resources
-backup_absolute_path: src/main/resources/backup/
-company_logo_path: src/main/resources/Kingdom-Bank-logo.png
-company_logo_path2: src/main/resources/e&m-logo.png2
-image_banner: src/main/resources/Kingdom-bank-banner.png
-image_banner2: src/main/resources/e&m_banner.jpg
-mvc:
-  pathmatch:
-    matching-strategy: ant-path-matcher
-cache:
-  type: SIMPLE
-resource_path: /home/coullence/Documents/PROD/EMT_ERP_Stage/EMT_ERP_backend/hr_service/src/main/resources
-
-
-mail:
-  protocol: smtps
-  host: mail.emtechhouse.co.ke
-  port: 465
-  username: no-reply@emtechhouse.co.ke
-  password: Pass123
-  properties:
-    mail:
-      smtp:
-        auth: true
-        ssl:
-          trust: "*"
-        starttls:
-          enable: true
-
-application:
-  enableEmail: true
-  useOTP: true
-  otpProd: true
-  otpTestMail: ckibet@emtechhouse.co.ke
-
-backup_mail: coullence@gmail.com
-from_mail: no-reply@emtechhouse.co.ke
-cc_mail: coullence@gmail.com
-organizationMail: no-reply@emtechhouse.co.ke
-emailSalutation: Dear
-emailMessage: Find the attached information from our partnership.
-emailRemarks: Thank you.
-emailRegards: Regards,
-emailOrganizationName: Kingdom Bank
-emailOrganizationPhone: +254 709 881 000
-emailOrganizationMail: info@kingdombankltd.co.ke
-emailOrganizationAddress: P.O. BOX 22741-00400
-emailOrganizationLocation: Kingdom Bank Towers, Argwings Kodhek Road, Kilimani
-emailOrganizationWebsite: https://www.kingdombankltd.co.ke/
-
-google:
-  app:
-    jwtSecret: bezKoderSecretKey
-    jwtExpirationMs: 86400000
-
-users:
-  app:
-    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
-    jwtExpirationMs: 43200000
-    client:
-      origin: http://localhost:4200/
-
-organisation:
-  email: no-reply@emtechhouse.co.ke
-
-API_GATWAY_URL: http://52.15.152.26:6200
-CREDENTIALS_REQ_URL: http://52.15.152.26:6200/api/v1/users/create
-FINANCE_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/create
-FINANCE_SALARY_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/fetchbyperiody
-AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
-=======
-#server:
-#  port: 7800
-#
-#spring:
-#  datasource:
-#    url: jdbc:mariadb://localhost:3306/mutua
-#    username: root
-#    password: Bhartem55
-#    driverClassName: org.mariadb.jdbc.Driver
-#    db: mutua
->>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
 #  jpa:
 #    show-sql: false
 #    hibernate:
@@ -162,7 +61,6 @@ AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
 #  type: SIMPLE
 #resource_path: /home/coullence/Documents/PROD/EMT_ERP_Stage/EMT_ERP_backend/hr_service/src/main/resources
 #
-<<<<<<< HEAD
 #
 #mail:
 #  protocol: smtps
@@ -170,23 +68,12 @@ AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
 #  port: 465
 #  username: no-reply@emtechhouse.co.ke
 #  password: Pass123
-=======
-#mail:
-#  protocol: smtp
-#  host: smtp.gmail.com
-#  port: 587
-#  username: joshmax169@gmail.com
-#  password: ixal rmxk pkxo huzp
->>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
 #  properties:
 #    mail:
 #      smtp:
 #        auth: true
-<<<<<<< HEAD
 #        ssl:
 #          trust: "*"
-=======
->>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
 #        starttls:
 #          enable: true
 #
@@ -231,7 +118,120 @@ AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
 #FINANCE_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/create
 #FINANCE_SALARY_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/fetchbyperiody
 #AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
-<<<<<<< HEAD
-=======
->>>>>>> main
->>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
+#=======
+##server:
+##  port: 7800
+##
+##spring:
+##  datasource:
+##    url: jdbc:mariadb://localhost:3306/mutua
+##    username: root
+##    password: Bhartem55
+##    driverClassName: org.mariadb.jdbc.Driver
+##    db: mutua
+#>>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
+##  jpa:
+##    show-sql: false
+##    hibernate:
+##      ddl-auto: update
+##      properties:
+##        hibernate:
+##          dialect: org.hibernate.dialect.MariaDBDialect
+##  servlet:
+##    multipart:
+##      enabled: true
+##      max-file-size: 1GB
+##      max-request-size: 1GB
+##
+##file:
+##  upload-dir: src/main/resources/uploads
+##Trainingfile:
+##  upload-dir: src/main/resources/uploads
+##myapp:
+##  upload-directory: src/main/resources/uploads/videos
+##reports_absolute_path: src/main/resources
+##backup_absolute_path: src/main/resources/backup/
+##company_logo_path: src/main/resources/Kingdom-Bank-logo.png
+##company_logo_path2: src/main/resources/e&m-logo.png2
+##image_banner: src/main/resources/Kingdom-bank-banner.png
+##image_banner2: src/main/resources/e&m_banner.jpg
+##mvc:
+##  pathmatch:
+##    matching-strategy: ant-path-matcher
+##cache:
+##  type: SIMPLE
+##resource_path: /home/coullence/Documents/PROD/EMT_ERP_Stage/EMT_ERP_backend/hr_service/src/main/resources
+##
+#<<<<<<< HEAD
+##
+##mail:
+##  protocol: smtps
+##  host: mail.emtechhouse.co.ke
+##  port: 465
+##  username: no-reply@emtechhouse.co.ke
+##  password: Pass123
+#=======
+##mail:
+##  protocol: smtp
+##  host: smtp.gmail.com
+##  port: 587
+##  username: joshmax169@gmail.com
+##  password: ixal rmxk pkxo huzp
+#>>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
+##  properties:
+##    mail:
+##      smtp:
+##        auth: true
+#<<<<<<< HEAD
+##        ssl:
+##          trust: "*"
+#=======
+#>>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
+##        starttls:
+##          enable: true
+##
+##application:
+##  enableEmail: true
+##  useOTP: true
+##  otpProd: true
+##  otpTestMail: ckibet@emtechhouse.co.ke
+##
+##backup_mail: coullence@gmail.com
+##from_mail: no-reply@emtechhouse.co.ke
+##cc_mail: coullence@gmail.com
+##organizationMail: no-reply@emtechhouse.co.ke
+##emailSalutation: Dear
+##emailMessage: Find the attached information from our partnership.
+##emailRemarks: Thank you.
+##emailRegards: Regards,
+##emailOrganizationName: Kingdom Bank
+##emailOrganizationPhone: +254 709 881 000
+##emailOrganizationMail: info@kingdombankltd.co.ke
+##emailOrganizationAddress: P.O. BOX 22741-00400
+##emailOrganizationLocation: Kingdom Bank Towers, Argwings Kodhek Road, Kilimani
+##emailOrganizationWebsite: https://www.kingdombankltd.co.ke/
+##
+##google:
+##  app:
+##    jwtSecret: bezKoderSecretKey
+##    jwtExpirationMs: 86400000
+##
+##users:
+##  app:
+##    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+##    jwtExpirationMs: 43200000
+##    client:
+##      origin: http://localhost:4200/
+##
+##organisation:
+##  email: no-reply@emtechhouse.co.ke
+##
+##API_GATWAY_URL: http://52.15.152.26:6200
+##CREDENTIALS_REQ_URL: http://52.15.152.26:6200/api/v1/users/create
+##FINANCE_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/create
+##FINANCE_SALARY_REQ_URL: http://52.15.152.26:8199/api/v1/salaries/fetchbyperiody
+##AVAILABLE_JOBS: http://localhost:8200/api/v1/job/application/get/all
+#<<<<<<< HEAD
+#=======
+#>>>>>>> main
+#>>>>>>> fbfd28c261accae1eb312f9b89dd2632e586984f
