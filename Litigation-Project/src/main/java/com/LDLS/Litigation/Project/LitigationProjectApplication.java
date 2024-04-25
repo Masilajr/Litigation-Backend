@@ -14,8 +14,15 @@ public class LitigationProjectApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(LitigationProjectApplication.class, args);
+
 		System.out.println(Started);
+
+
+		System.out.println(Started);
+
         System.out.println("Attention: This is a Monolithic Application!");
+
+
 	}
 
 }
