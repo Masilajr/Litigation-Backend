@@ -13,11 +13,8 @@ public interface ClientManagementRepository extends JpaRepository<ClientManageme
 //    List<ClientManagement> findByClientCodeOrLoanAccNo(String clientCode, Long loanAccNo);
 
 //    @Query("SELECT e FROM ClientManagement e WHERE (:clientCode IS NULL OR e.clientCode = :clientCode) AND (:loanAccNo IS NULL OR e.loanAccNo = :loanAccNo)")
-<<<<<<< HEAD
      List<ClientManagement> findByClientCodeOrLoanAccNo(String clientCode, Long loanAccNo);
-=======
-  List<ClientManagement> findByClientCodeOrLoanAccNo(String clientCode, Long loanAccNo);
->>>>>>> 8cac70214b8ac0ac09a765ce2c39ccf85e3d3eea
+
 
     long countByStatus(String status);
 }
