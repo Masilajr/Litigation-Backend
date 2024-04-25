@@ -1,8 +1,11 @@
 package com.LDLS.Litigation.Project.BillingModule.Entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
+@JsonIgnoreProperties({"billingReport"})
 public class InvoiceReports {
 
     @Id
@@ -20,6 +24,7 @@ public class InvoiceReports {
     private String invoiceNumber;
     private String contactInformation;
     private LocalDate invoiceDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate billingPeriodFrom;
     private LocalDate billingPeriodTo;
     private String customerName;
@@ -32,6 +37,7 @@ public class InvoiceReports {
 
     @ManyToOne
     @JoinColumn(name = "billing_report_id")
+    @JsonIgnore
     private BillingReport billingReport;
 
     public void generateInvoiceNumber() {
