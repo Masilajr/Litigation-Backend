@@ -20,10 +20,10 @@ public class ExpenseTracking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "billing_report_id")
-    @JsonIgnore
-    private BillingReport billingReport;
+//    @ManyToOne
+//    @JoinColumn(name = "billing_report_id")
+//    @JsonIgnore
+//    private BillingReport billingReport;
 
     private String expenseType;
     private String expenseDescription;

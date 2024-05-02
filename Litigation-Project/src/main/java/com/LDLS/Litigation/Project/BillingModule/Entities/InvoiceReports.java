@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
-@JsonIgnoreProperties({"billingReport"})
 public class InvoiceReports {
 
     @Id
@@ -30,15 +29,12 @@ public class InvoiceReports {
     private String customerName;
     private String customerAddress;
     private LocalDate dueDate;
-//    private Double latePaymentFees;
-//      private String returnPolicy;
-
     private PaymentMethod paymentMethod;
 
-    @ManyToOne
-    @JoinColumn(name = "billing_report_id")
-    @JsonIgnore
-    private BillingReport billingReport;
+//    @ManyToOne
+//    @JoinColumn(name = "billing_report_id")
+//    @JsonIgnore
+//    private BillingReport billingReport;
 
     public void generateInvoiceNumber() {
         String statusPrefix = paymentStatus.length() > 3 ? paymentStatus.substring(0, 3) : paymentStatus;

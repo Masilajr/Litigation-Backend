@@ -17,9 +17,6 @@ public class LitigationProjectApplication {
 
 		System.out.println(Started);
 
-
-		System.out.println(Started);
-
         System.out.println("Attention: This is a Monolithic Application!");
 
 

@@ -13,4 +13,6 @@ public class EntityResponse<T> {
     private String message;
     private T entity;
     private Integer statusCode;
+
+
 }

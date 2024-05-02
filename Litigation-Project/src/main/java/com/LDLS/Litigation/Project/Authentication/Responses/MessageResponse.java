@@ -1,5 +1,13 @@
 package com.LDLS.Litigation.Project.Authentication.Responses;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+
+@NoArgsConstructor
+@Data
+@ToString
 public class MessageResponse {
     private String message;
 

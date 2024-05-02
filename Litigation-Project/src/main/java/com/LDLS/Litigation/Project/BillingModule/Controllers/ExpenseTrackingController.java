@@ -3,7 +3,6 @@ package com.LDLS.Litigation.Project.BillingModule.Controllers;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import com.LDLS.Litigation.Project.BillingModule.Entities.ExpenseTracking;
 import com.LDLS.Litigation.Project.BillingModule.Services.ExpenseTrackingService;
-import io.swagger.annotations.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

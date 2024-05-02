@@ -1,7 +1,6 @@
 package com.LDLS.Litigation.Project.UserRegistration;
 import com.LDLS.Litigation.Project.Authentication.MailService.MailsService;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
-import com.LDLS.Litigation.Project.ClientManagement.ClientManagement;
 import com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -11,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import javax.persistence.EntityGraph;
-import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
