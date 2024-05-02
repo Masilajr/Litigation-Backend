@@ -58,6 +58,30 @@ public class ClientManagementService {
         return clientManagementRepository.findByClientCodeOrLoanAccNo(clientCode, loanAccNo);
     }
 
+    public long[] getClientRegistrationCountByMonth(int year) {
+        long[] registrationCountByMonth = new long[12];
+        Arrays.fill(registrationCountByMonth, 0L); // Initialize all counts to zero
+
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+
+        List<ClientManagement> clients = clientManagementRepository.findAll().stream()
+                .filter(client -> {
+                    LocalDate registrationDate = client.getStartDate();
+                    return registrationDate != null &&
+                            (registrationDate.isEqual(startDate) || registrationDate.isAfter(startDate)) &&
+                            (registrationDate.isEqual(endDate) || registrationDate.isBefore(endDate));
+                })
+                .collect(Collectors.toList());
+
+        // Update the counts for months where clients are registered
+        for (ClientManagement client : clients) {
+            int monthIndex = client.getStartDate().getMonthValue() - 1; // Month index starts from 0
+            registrationCountByMonth[monthIndex]++;
+        }
+
+        return registrationCountByMonth;
+    }
 
     public EntityResponse assignOfficerToClient(Long id, ClientRequest request) {
         EntityResponse response = new EntityResponse<>();
