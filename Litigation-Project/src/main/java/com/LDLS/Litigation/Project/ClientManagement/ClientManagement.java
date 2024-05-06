@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "Client")
 public class ClientManagement {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NonNull
     private String firstName;
@@ -57,6 +57,7 @@ public class ClientManagement {
     private LocalDate deadline;
     private String priority;
     private String additionalInfo;
+    private LocalDate createdAt;
 
     // active, pending, total
     private long totalClients;
