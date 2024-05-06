@@ -112,19 +112,34 @@ public class UserRegistrationController {
         return ResponseEntity.ok(updatedUserRegistration);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<UserRegistration> updateUserStatus(@PathVariable Long id, @RequestBody String status) {
-        try {
-            UserRegistration updatedUser = userRegistrationService.updateUserStatus(id, status);
-            return ResponseEntity.ok(updatedUser);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+//    @PutMapping("/status/{id}")
+//    public ResponseEntity<UserRegistration> updateUserStatus(@PathVariable Long id, @RequestBody UserRegistrationDTO request) {
+//        String status = request.getStatus();
+//        try {
+//            UserRegistration updatedUser = userRegistrationService.updateUserStatus(id, status);
+//            return ResponseEntity.ok(updatedUser);
+//        } catch (UserNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+@PutMapping("/status/{id}")
+public ResponseEntity<UserRegistration> updateUserStatus(@PathVariable Long id, @RequestBody UserRegistrationDTO request) {
+    String status = request.getStatus(); // Get status from the request
+    try {
+        UserRegistration updatedUser = userRegistrationService.updateUserStatus(id, status);
+        return ResponseEntity.ok(updatedUser);
+    } catch (UserNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
 
 
 

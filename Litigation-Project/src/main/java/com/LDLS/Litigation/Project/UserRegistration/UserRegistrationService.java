@@ -46,7 +46,7 @@ public class UserRegistrationService {
             userRegistrationDTO.setLastName(userRegistration.getLastName());
             userRegistrationDTO.setUserId(userRegistration.getUserId());
             userRegistrationDTO.setEmail(userRegistration.getEmail());
-            userRegistrationDTO.setPrivilege(userRegistration.getPrivilege());
+//            userRegistrationDTO.setPrivilege(userRegistration.getPrivilege());
             userRegistrationDTO.setPhoneNumber(userRegistration.getPhoneNumber());
             userRegistrationDTO.setBranch(userRegistration.getBranch());
             userRegistrationDTO.setNationalIdNumber(userRegistration.getNationalIdNumber());
@@ -168,7 +168,6 @@ public class UserRegistrationService {
             throw new UserNotFoundException("Customer registration not found with id: " + id);
         }
     }
-
     public UserRegistration updateUserStatus(Long id, String status) {
         // Validate if the provided status is either "Active" or "Locked"
         if (!status.equals("Active") && !status.equals("Locked")) {
@@ -178,13 +177,64 @@ public class UserRegistrationService {
         Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
         if (optionalUserRegistration.isPresent()) {
             UserRegistration existingUserRegistration = optionalUserRegistration.get();
-            existingUserRegistration.setStatus(status);
+            existingUserRegistration.setStatus(status); // Update status here
             return userRegistrationRepository.save(existingUserRegistration);
         } else {
             throw new UserNotFoundException("Customer registration not found with id: " + id);
         }
     }
 
+
+//    public UserRegistration updateUserStatus(Long id, String status) {
+//        // Validate if the provided status is either "Active" or "Locked"
+//        if (!status.equals("Active") && !status.equals("Locked")) {
+//            throw new IllegalArgumentException("Invalid status provided: " + status);
+//        }
+//
+//        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+//        if (optionalUserRegistration.isPresent()) {
+//            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+//            existingUserRegistration.setStatus("Locked");
+//            return userRegistrationRepository.save(existingUserRegistration);
+//        } else {
+//            throw new UserNotFoundException("Customer registration not found with id: " + id);
+//        }
+//    }
+//public UserRegistration updateUserStatus(Long id, String status) {
+//    try {
+//        // Validate if the provided status is either "Active" or "Locked"
+//        if (!status.equals("Active") && !status.equals("Locked")) {
+//            throw new IllegalArgumentException("Invalid status provided: " + status);
+//        }
+//
+//        // Log the ID and status being processed
+//        System.out.println("Updating status for user with ID: " + id + " to " + status);
+//
+//        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+//        if (optionalUserRegistration.isPresent()) {
+//            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+//            existingUserRegistration.setStatus("Locked");
+//            return userRegistrationRepository.save(existingUserRegistration);
+//        } else {
+//            // Log user not found
+//            System.out.println("User not found with ID: " + id);
+//            throw new UserNotFoundException("Customer registration not found with id: " + id);
+//        }
+//    } catch (IllegalArgumentException e) {
+//        // Log and rethrow the IllegalArgumentException
+//        System.out.println("IllegalArgumentException occurred: " + e.getMessage());
+//        throw e;
+//    } catch (UserNotFoundException e) {
+//        // Log and rethrow the UserNotFoundException
+//        System.out.println("UserNotFoundException occurred: " + e.getMessage());
+//        throw e;
+//    } catch (Exception e) {
+//        // Log any other unexpected exceptions
+//        System.out.println("Unexpected exception occurred: " + e.getMessage());
+//        throw e;
+//    }
+//}
+//
 
 
 

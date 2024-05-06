@@ -140,11 +140,7 @@ public class ClientManagementService {
     public List<ClientManagement> getAllClients() {
         return clientManagementRepository.findAll();
     }
-//    public Map<String, Long> getLoanSummary(List<ClientManagement> clients) {
-//        return clients.stream()
-//                .collect(Collectors.groupingBy(ClientManagement::getLoanDescription,
-//                        Collectors.summingLong(ClientManagement::getLoanAmount)));
-//    }
+
 public Map<String, Map<String, Long>> getLoanSummary(List<ClientManagement> clients) {
     return clients.stream()
             .filter(c -> c.getLoanDescription() != null && c.getOutPrincipal() != null) // Ensure loanDescription and outPrincipal are not null

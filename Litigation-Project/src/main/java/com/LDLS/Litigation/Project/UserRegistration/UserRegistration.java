@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "User_Registration")
 public class UserRegistration {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NonNull
