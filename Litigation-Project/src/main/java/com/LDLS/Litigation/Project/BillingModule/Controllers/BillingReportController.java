@@ -42,7 +42,7 @@ public class BillingReportController {
     public ResponseEntity<ByteArrayResource> InvoicesReports() throws FileNotFoundException, JRException, SQLException {
         Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
         ClassLoader classLoader = getClass().getClassLoader();
-        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("templates/InvoiceReport.jrxml"));
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Reports/Invoice1.jrxml"));
         Map<String, Object> parameter = new HashMap<>();
 //        parameter.put("churchId", id);
 //        parameter.put("logo", logo);
