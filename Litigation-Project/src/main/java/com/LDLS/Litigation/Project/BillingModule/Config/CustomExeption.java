@@ -1,4 +1,4 @@
-package com.LDLS.Litigation.Project.BillingModule.Controllers;
+package com.LDLS.Litigation.Project.BillingModule.Config;
 
 public class CustomExeption extends Throwable {
     public static class ResourceNotFoundException extends RuntimeException {
