@@ -54,4 +54,22 @@ public class BillingReportController {
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
         return ResponseEntity.ok().headers(headers).body(byteArrayResource);
     }
+
+    @GetMapping("/Expenses Report")
+    public ResponseEntity<ByteArrayResource> ExpenseTrackingReports() throws FileNotFoundException, JRException, SQLException {
+        Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
+        ClassLoader classLoader = getClass().getClassLoader();
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Reports/ExpenseTrackingReport.jrxml"));
+        Map<String, Object> parameter = new HashMap<>();
+//        parameter.put("churchId", id);
+//        parameter.put("logo", logo);
+        JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
+        byte[] data = JasperExportManager.exportReportToPdf(report);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Expense_Reports.pdf");
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        ByteArrayResource byteArrayResource = new ByteArrayResource(data);
+        return ResponseEntity.ok().headers(headers).body(byteArrayResource);
+    }
+
 }
