@@ -42,10 +42,8 @@ public class BillingReportController {
     public ResponseEntity<ByteArrayResource> InvoicesReports() throws FileNotFoundException, JRException, SQLException {
         Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
         ClassLoader classLoader = getClass().getClassLoader();
-        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Reports/Invoice1.jrxml"));
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/Invoice1.jrxml"));
         Map<String, Object> parameter = new HashMap<>();
-//        parameter.put("churchId", id);
-//        parameter.put("logo", logo);
         JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
         byte[] data = JasperExportManager.exportReportToPdf(report);
         HttpHeaders headers = new HttpHeaders();
@@ -59,10 +57,8 @@ public class BillingReportController {
     public ResponseEntity<ByteArrayResource> ExpenseTrackingReports() throws FileNotFoundException, JRException, SQLException {
         Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
         ClassLoader classLoader = getClass().getClassLoader();
-        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Reports/ExpenseTrackingReport.jrxml"));
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/ExpenseTrackingReport.jrxml"));
         Map<String, Object> parameter = new HashMap<>();
-//        parameter.put("churchId", id);
-//        parameter.put("logo", logo);
         JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
         byte[] data = JasperExportManager.exportReportToPdf(report);
         HttpHeaders headers = new HttpHeaders();
