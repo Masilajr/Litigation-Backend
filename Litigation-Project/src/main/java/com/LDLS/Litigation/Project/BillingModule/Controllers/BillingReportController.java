@@ -42,27 +42,27 @@ public class BillingReportController {
     public ResponseEntity<ByteArrayResource> InvoicesReports() throws FileNotFoundException, JRException, SQLException {
         Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
         ClassLoader classLoader = getClass().getClassLoader();
-        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/Invoice1.jrxml"));
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/BillingInvoiceReport.jrxml"));
         Map<String, Object> parameter = new HashMap<>();
         JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
         byte[] data = JasperExportManager.exportReportToPdf(report);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Invoices_Reports.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Invoices_Report.pdf");
         headers.setContentType(MediaType.APPLICATION_PDF);
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
         return ResponseEntity.ok().headers(headers).body(byteArrayResource);
     }
 
     @GetMapping("/Expenses Report")
-    public ResponseEntity<ByteArrayResource> ExpenseTrackingReports() throws FileNotFoundException, JRException, SQLException {
+    public ResponseEntity<ByteArrayResource> ExpenseTrackingReport() throws FileNotFoundException, JRException, SQLException {
         Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
         ClassLoader classLoader = getClass().getClassLoader();
-        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/ExpenseTrackingReport.jrxml"));
+        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/BillingExpense.jrxml"));
         Map<String, Object> parameter = new HashMap<>();
         JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
         byte[] data = JasperExportManager.exportReportToPdf(report);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Expense_Reports.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Expenses_Report.pdf");
         headers.setContentType(MediaType.APPLICATION_PDF);
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
         return ResponseEntity.ok().headers(headers).body(byteArrayResource);
