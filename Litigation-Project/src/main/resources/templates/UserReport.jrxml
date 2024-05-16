@@ -81,11 +81,6 @@
         <property name="com.jaspersoft.studio.field.label" value="phone_number"/>
         <property name="com.jaspersoft.studio.field.tree.path" value="user_registration"/>
     </field>
-    <field name="email_address" class="java.lang.String">
-        <property name="com.jaspersoft.studio.field.name" value="email_address"/>
-        <property name="com.jaspersoft.studio.field.label" value="email_address"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="user_registration"/>
-    </field>
     <field name="status" class="java.lang.String">
         <property name="com.jaspersoft.studio.field.name" value="status"/>
         <property name="com.jaspersoft.studio.field.label" value="status"/>

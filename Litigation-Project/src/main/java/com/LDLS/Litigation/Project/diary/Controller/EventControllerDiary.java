@@ -5,7 +5,6 @@ import com.LDLS.Litigation.Project.diary.model.EventStatus;
 import com.LDLS.Litigation.Project.diary.model.Events;
 import com.LDLS.Litigation.Project.diary.repository.EventRepository;
 import com.LDLS.Litigation.Project.diary.service.EventService;
-import com.LDLS.Litigation.Project.diary.service.GoogleCalendarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,8 +31,8 @@ public class EventControllerDiary {
     @Autowired
     private EventRepository eventRepository;
 
-    @Autowired
-    private GoogleCalendarService googleCalendarService;
+//    @Autowired
+//    private GoogleCalendarService googleCalendarService;
 
 
     @PostMapping("/add")
@@ -204,10 +203,10 @@ public ResponseEntity<String> cancelEvent(@PathVariable Long eventId) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating event status: " + e.getMessage());
         }
     }
-    @PostMapping
-    public void addEventToGoogleCalendar(@RequestBody Events event) throws IOException, GeneralSecurityException {
-        googleCalendarService.addEventToGoogleCalendar(event);
-    }
+//    @PostMapping
+//    public void addEventToGoogleCalendar(@RequestBody Events event) throws IOException, GeneralSecurityException {
+//        googleCalendarService.addEventToGoogleCalendar(event);
+//    }
 //    @GetMapping("/completed")
 //    public List<Events> getCompletedEventsInChronologicalOrder() {
 //        return eventService.getCompletedEventsInChronologicalOrder();
