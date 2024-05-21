@@ -23,12 +23,24 @@ public class InvoiceReportsService {
         return invoiceReportsRepository.save(invoiceReports);
     }
 
-    public List<InvoiceReports> getAllInvoicesReports() { return invoiceReportsRepository.findAll();
+    public List<InvoiceReports> getAllInvoicesReports() {
+        return invoiceReportsRepository.findAll();
     }
 
-    public InvoiceReports updateInvoiceReports(InvoiceReports invoiceReports) { return invoiceReports;
+    public InvoiceReports updateInvoiceReports(InvoiceReports invoiceReports) {
+        return invoiceReports;
     }
 
     public void deleteInvoiceReports(Long id) {
+    }
+
+public Double getRecoveredAmount() {
+    return invoiceReportsRepository.getRecoveredAmount();
+}
+    public List<Long> getApprovedInvoices() {
+        return invoiceReportsRepository.getApprovedInvoices();
+    }
+    public List<Long> getRejectedInvoices() {
+        return invoiceReportsRepository.getRejectedInvoices();
     }
 }

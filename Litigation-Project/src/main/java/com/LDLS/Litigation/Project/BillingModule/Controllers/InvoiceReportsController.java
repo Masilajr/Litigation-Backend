@@ -30,6 +30,7 @@ public class InvoiceReportsController {
 
         return invoiceReportsService.getAllInvoicesReports();
     }
+
     @PutMapping("/invoices/{id}")
     public ResponseEntity<InvoiceReports> updateInvoiceReports(@PathVariable Long id, @RequestBody InvoiceReports invoiceDetailsReports) {
         InvoiceReports existingInvoiceReports = invoiceReportsRepository.findById(id).orElseThrow(() -> new CustomExeption.ResourceNotFoundException("InvoiceReports not found with id: " + id));
@@ -38,8 +39,6 @@ public class InvoiceReportsController {
         existingInvoiceReports.setInvoiceDate(invoiceDetailsReports.getInvoiceDate());
         existingInvoiceReports.setBillingPeriodFrom(invoiceDetailsReports.getBillingPeriodFrom());
         existingInvoiceReports.setBillingPeriodTo(invoiceDetailsReports.getBillingPeriodTo());
-//        existingInvoiceReports.setLatePaymentFees(invoiceDetailsReports.getLatePaymentFees());
-//        existingInvoiceReports.setReturnPolicy(invoiceDetailsReports.getReturnPolicy());
         existingInvoiceReports.setInvoiceAmount(invoiceDetailsReports.getInvoiceAmount());
         existingInvoiceReports.setPaymentStatus(invoiceDetailsReports.getPaymentStatus());
 
@@ -51,5 +50,17 @@ public class InvoiceReportsController {
     public ResponseEntity<?> deleteInvoiceReports(@PathVariable Long id) {
         invoiceReportsService.deleteInvoiceReports(id);
         return ResponseEntity.ok("InvoiceReports deleted Successfully");
+    }
+    @GetMapping("/recovered-amount")
+    public Double getRecoveredAmount() {
+        return invoiceReportsService.getRecoveredAmount();
+   }
+    @GetMapping("/approved-invoices")
+    public List<Long> getApprovedInvoices() {
+        return invoiceReportsService.getApprovedInvoices();
+    }
+    @GetMapping("/rejected-invoices")
+    public List<Long> getRejectedInvoices() {
+        return invoiceReportsService.getRejectedInvoices();
     }
 }

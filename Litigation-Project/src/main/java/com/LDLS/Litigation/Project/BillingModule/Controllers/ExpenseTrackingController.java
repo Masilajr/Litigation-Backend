@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -52,6 +53,16 @@ public class ExpenseTrackingController {
         } catch (Exception e) {
             log.error("An error occurred while retrieving the expense: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new EntityResponse("An error occurred while retrieving the expense: " + e.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
+    @GetMapping("/total-expenses")
+    public ResponseEntity<EntityResponse> getTotalExpenses() {
+        try {
+            List<Double> totalExpenses = expenseTrackingService.getTotalExpenses();
+            return ResponseEntity.ok(new EntityResponse("Total expenses retrieved successfully", totalExpenses, HttpStatus.OK.value()));
+        } catch (Exception e) {
+            log.error("An error occurred while retrieving the total expenses: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new EntityResponse("An error occurred while retrieving the total expenses: " + e.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
 
