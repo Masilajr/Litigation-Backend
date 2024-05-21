@@ -1,5 +1,6 @@
 package com.LDLS.Litigation.Project.BillingModule.Controllers;
 
+import com.LDLS.Litigation.Project.BillingModule.Repositories.ExpenseTrackingRepository;
 import com.LDLS.Litigation.Project.BillingModule.Repositories.InvoiceReportsRepository;
 import net.sf.jasperreports.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class BillingReportController {
 
     @Autowired
     InvoiceReportsRepository invoiceReportsRepository;
+
+    @Autowired
+    ExpenseTrackingRepository expenseTrackingRepository;
 
     @Value("${others.filesPath}")
     private String filesPath;
@@ -67,5 +71,48 @@ public class BillingReportController {
         ByteArrayResource byteArrayResource = new ByteArrayResource(data);
         return ResponseEntity.ok().headers(headers).body(byteArrayResource);
     }
-
+//    @GetMapping("/recovered-amount")
+//    public ResponseEntity<ByteArrayResource> RecoveredAmountReports() throws FileNotFoundException, JRException, SQLException {
+//        Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/BillingInvoiceReport.jrxml"));
+//        Map<String, Object> parameter = new HashMap<>();
+//        JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
+//        byte[] data = JasperExportManager.exportReportToPdf(report);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=RecoveredAmount_Report.pdf");
+//        headers.setContentType(MediaType.APPLICATION_PDF);
+//        ByteArrayResource byteArrayResource = new ByteArrayResource(data);
+//        return ResponseEntity.ok().headers(headers).body(byteArrayResource);
+//    }
+//
+//    @GetMapping("/rejected-invoices")
+//    public ResponseEntity<ByteArrayResource> RejecetdInvoiceReports() throws FileNotFoundException, JRException, SQLException {
+//        Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/BillingInvoiceReport.jrxml"));
+//        Map<String, Object> parameter = new HashMap<>();
+//        JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
+//        byte[] data = JasperExportManager.exportReportToPdf(report);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=RejectedInvoices_Report.pdf");
+//        headers.setContentType(MediaType.APPLICATION_PDF);
+//        ByteArrayResource byteArrayResource = new ByteArrayResource(data);
+//        return ResponseEntity.ok().headers(headers).body(byteArrayResource);
+//    }
+//
+//    @GetMapping("/approved-invoices")
+//    public ResponseEntity<ByteArrayResource> ApprovedInvoicesReports() throws FileNotFoundException, JRException, SQLException {
+//        Connection connection = DriverManager.getConnection(this.db, this.username, this.password);
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        JasperReport compileReport = JasperCompileManager.compileReport(classLoader.getResourceAsStream("Templates/BillingInvoiceReport.jrxml"));
+//        Map<String, Object> parameter = new HashMap<>();
+//        JasperPrint report = JasperFillManager.fillReport(compileReport, parameter, connection);
+//        byte[] data = JasperExportManager.exportReportToPdf(report);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ApprovedInvoices_Report.pdf");
+//        headers.setContentType(MediaType.APPLICATION_PDF);
+//        ByteArrayResource byteArrayResource = new ByteArrayResource(data);
+//        return ResponseEntity.ok().headers(headers).body(byteArrayResource);
+//    }
 }

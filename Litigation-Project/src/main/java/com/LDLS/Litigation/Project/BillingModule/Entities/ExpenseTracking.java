@@ -25,9 +25,12 @@ public class ExpenseTracking {
 //    @JsonIgnore
 //    private BillingReport billingReport;
 
+    @Column(nullable = false)
     private String expenseType;
     private String expenseDescription;
+    @Column(nullable = false)
     private Double expenseAmount;
+//    private Double expenses;
     private LocalDate expenseDate;
     private String expenseApprover;
     private LocalDate expenseApprovalDate;
