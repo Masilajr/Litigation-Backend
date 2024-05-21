@@ -15,28 +15,8 @@ public class DashboardController {
     @Autowired
     ClientManagementService clientManagementService;
 
-
-//    @GetMapping("/active")
-//    public List<ClientManagement> getActiveClients() {
-//        return clientManagementService.getActiveClients();
-//    }
-//
-//    @GetMapping("/litigation")
-//    public List<ClientManagement> getLitigationClients() {
-//        return clientManagementService.getLitigationClients();
-//    }
-//
-//    @GetMapping("/pending")
-//    public List<ClientManagement> getPendingClients() {
-//        return clientManagementService.getPendingClients();
-//    }
-//
-//    @GetMapping("/total")
-//    public List<ClientManagement> getTotalClients() {
-//        return clientManagementService.getTotalClients();
-//    }
-@GetMapping("/total-clients")
-public long getTotalClientsCount() {
+    @GetMapping("/total-clients")
+    public long getTotalClientsCount() {
     return clientManagementService.countTotalClients();
 }
 

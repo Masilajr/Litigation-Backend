@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "User_Registration")
 public class UserRegistration {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NonNull
@@ -35,6 +35,8 @@ public class UserRegistration {
     private boolean firstLogin = true;
     private String username;
     private String temporaryPassword;
+
+    private String status;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
