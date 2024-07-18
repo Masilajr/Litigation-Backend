@@ -21,8 +21,10 @@ public interface UserRegistrationRepository extends JpaRepository<UserRegistrati
     @EntityGraph(attributePaths = {"privileges"})
     Optional<UserRegistration> findById(Long id);
 
-    @Query("SELECT new com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO(e.id, e.firstName, e.middleName, e.lastName, e.userId, e.email, e.phoneNumber, e.branch, e.nationalIdNumber, e.role, e.gender, e.username, e.firstLogin, e.accessPeriod, e.country) FROM UserRegistration e WHERE (:userId IS NULL OR e.userId = :userId) AND (:nationalIdNumber IS NULL OR e.nationalIdNumber = :nationalIdNumber)")
-    List<UserRegistrationDTO> findByUserIdorNationalIdNumber(String userId, String nationalIdNumber);
+    @Query("SELECT new com.LDLS.Litigation.Project.UserRegistration.DTO.UserRegistrationDTO(e.id, e.firstName, e.middleName, e.lastName, e.userId, e.email, e.phoneNumber, e.branch, e.nationalIdNumber, e.role, e.gender, e.username, e.firstLogin, e.accessPeriod, e.country, e.status) FROM UserRegistration e WHERE (:userId IS NULL OR e.userId = :userId) AND (:nationalIdNumber IS NULL OR e.nationalIdNumber = :nationalIdNumber)")
+    List<UserRegistrationDTO> findByUserIdOrNationalIdNumber(String userId, String nationalIdNumber);
+
+    long countByStatus(String status);
 
 
 }

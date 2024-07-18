@@ -24,6 +24,14 @@ public class UserRegistrationService {
     @Autowired
     MailsService mailService;
 
+    public long countActiveUsers() {
+        return userRegistrationRepository.countByStatus("active");
+    }
+
+    public long countLockedUsers() {
+        return userRegistrationRepository.countByStatus("locked");
+    }
+
     public List<UserRegistrationDTO> getAllCustomerRegistration() {
         List<UserRegistration> userRegistrations = userRegistrationRepository.findAll();
         List<UserRegistrationDTO> userRegistrationDTOs = new ArrayList<>();
@@ -35,7 +43,7 @@ public class UserRegistrationService {
             userRegistrationDTO.setLastName(userRegistration.getLastName());
             userRegistrationDTO.setUserId(userRegistration.getUserId());
             userRegistrationDTO.setEmail(userRegistration.getEmail());
-            userRegistrationDTO.setPrivilege(userRegistration.getPrivilege());
+//            userRegistrationDTO.setPrivilege(userRegistration.getPrivilege());
             userRegistrationDTO.setPhoneNumber(userRegistration.getPhoneNumber());
             userRegistrationDTO.setBranch(userRegistration.getBranch());
             userRegistrationDTO.setNationalIdNumber(userRegistration.getNationalIdNumber());
@@ -45,6 +53,7 @@ public class UserRegistrationService {
             userRegistrationDTO.setTemporaryPassword(userRegistration.getTemporaryPassword());
             userRegistrationDTO.setAccessPeriod(userRegistration.getAccessPeriod());
             userRegistrationDTO.setCountry(userRegistration.getCountry());
+            userRegistrationDTO.setStatus(userRegistration.getStatus());
 
             userRegistrationDTOs.add(userRegistrationDTO);
         }
@@ -76,6 +85,9 @@ public class UserRegistrationService {
             // Set user privileges
             List<Privilege> privilegeList = new ArrayList<>(privileges);
             userRegistration.setPrivileges(privilegeList);
+            // Inside createUserRegistration method
+            userRegistration.setStatus("Active");
+
 
             // Save user registration
             UserRegistration registration = userRegistrationRepository.save(userRegistration);
@@ -132,25 +144,97 @@ public class UserRegistrationService {
         if (userId == null && nationalIdNumber == null) {
             throw new IllegalArgumentException("At least one of userId or NationalIdNumber must be provided.");
         }
-        return userRegistrationRepository.findByUserIdorNationalIdNumber(userId, nationalIdNumber);
+        return userRegistrationRepository.findByUserIdOrNationalIdNumber(userId, nationalIdNumber);
     }
-
-
 
 
     public UserRegistration updateUserRegistration(Long id, UserRegistration newUserRegistration) {
         Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
         if (optionalUserRegistration.isPresent()) {
             UserRegistration existingUserRegistration = optionalUserRegistration.get();
+
             // Copy non-null properties from newUserRegistration to existingUserRegistration
-            BeanUtils.copyProperties(newUserRegistration, existingUserRegistration, "id", "privileges");
+            BeanUtils.copyProperties(newUserRegistration, existingUserRegistration, "id", "privileges", "status");
+
             // Update privileges separately
             existingUserRegistration.setPrivileges(newUserRegistration.getPrivileges());
+
+            // Save the updated user registration
             return userRegistrationRepository.save(existingUserRegistration);
         } else {
             throw new UserNotFoundException("Customer registration not found with id: " + id);
         }
     }
+    public UserRegistration updateUserStatus(Long id, String status) {
+        // Validate if the provided status is either "Active" or "Locked"
+        if (!status.equals("Active") && !status.equals("Locked")) {
+            throw new IllegalArgumentException("Invalid status provided: " + status);
+        }
+
+        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+        if (optionalUserRegistration.isPresent()) {
+            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+            existingUserRegistration.setStatus(status); // Update status here
+            return userRegistrationRepository.save(existingUserRegistration);
+        } else {
+            throw new UserNotFoundException("Customer registration not found with id: " + id);
+        }
+    }
+
+
+//    public UserRegistration updateUserStatus(Long id, String status) {
+//        // Validate if the provided status is either "Active" or "Locked"
+//        if (!status.equals("Active") && !status.equals("Locked")) {
+//            throw new IllegalArgumentException("Invalid status provided: " + status);
+//        }
+//
+//        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+//        if (optionalUserRegistration.isPresent()) {
+//            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+//            existingUserRegistration.setStatus("Locked");
+//            return userRegistrationRepository.save(existingUserRegistration);
+//        } else {
+//            throw new UserNotFoundException("Customer registration not found with id: " + id);
+//        }
+//    }
+//public UserRegistration updateUserStatus(Long id, String status) {
+//    try {
+//        // Validate if the provided status is either "Active" or "Locked"
+//        if (!status.equals("Active") && !status.equals("Locked")) {
+//            throw new IllegalArgumentException("Invalid status provided: " + status);
+//        }
+//
+//        // Log the ID and status being processed
+//        System.out.println("Updating status for user with ID: " + id + " to " + status);
+//
+//        Optional<UserRegistration> optionalUserRegistration = userRegistrationRepository.findById(id);
+//        if (optionalUserRegistration.isPresent()) {
+//            UserRegistration existingUserRegistration = optionalUserRegistration.get();
+//            existingUserRegistration.setStatus("Locked");
+//            return userRegistrationRepository.save(existingUserRegistration);
+//        } else {
+//            // Log user not found
+//            System.out.println("User not found with ID: " + id);
+//            throw new UserNotFoundException("Customer registration not found with id: " + id);
+//        }
+//    } catch (IllegalArgumentException e) {
+//        // Log and rethrow the IllegalArgumentException
+//        System.out.println("IllegalArgumentException occurred: " + e.getMessage());
+//        throw e;
+//    } catch (UserNotFoundException e) {
+//        // Log and rethrow the UserNotFoundException
+//        System.out.println("UserNotFoundException occurred: " + e.getMessage());
+//        throw e;
+//    } catch (Exception e) {
+//        // Log any other unexpected exceptions
+//        System.out.println("Unexpected exception occurred: " + e.getMessage());
+//        throw e;
+//    }
+//}
+//
+
+
+
     public EntityResponse deleteUserRegistrationById(Long id) {
         EntityResponse res = new EntityResponse<>();
         try {

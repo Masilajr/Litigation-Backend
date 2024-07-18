@@ -2,7 +2,11 @@ package com.LDLS.Litigation.Project.ClientManagement;
 import com.LDLS.Litigation.Project.Authentication.Responses.EntityResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +58,24 @@ public class ClientManagementController {
     @GetMapping("/search")
     public List<ClientManagement> search(@RequestParam(required = false) String clientCode, @RequestParam(required = false) Long loanAccNo) {
         return clientManagementService.searchByClientOrLoan(clientCode, loanAccNo);
+    }
+
+    @GetMapping("/registration-count-by-month")
+    public ResponseEntity<EntityResponse<long[]>> getClientRegistrationCountByCurrentYear() {
+        EntityResponse<long[]> response = new EntityResponse<>();
+        try {
+            int currentYear = YearMonth.now().getYear(); // Get the current year
+            long[] registrationCountByMonth = clientManagementService.getClientRegistrationCountByMonth(currentYear);
+            response.setMessage("Client registration count by month for the current year");
+            response.setEntity(registrationCountByMonth);
+            response.setStatusCode(HttpStatus.OK.value());
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            response.setMessage("Error retrieving client registration count by month: " + e.getMessage());
+            response.setEntity(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PostMapping("/transfer-to-litigation")
